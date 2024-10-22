@@ -1,13 +1,13 @@
 import React from 'react';
+import Layout from './components/Layout';
 import Home from './pages/Home';
-import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
+    <Layout>
       <Home />
-    </div>
+    </Layout>
   );
-}
+};
 
 export default App;

@@ -1,18 +1,15 @@
 .home {
     min-height: 100vh;
-    background-color: var(--background-color);
   }
   
   .carousel img {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-    margin-bottom: 2rem;
+    max-width: 100%;
+    height: auto;
+    display: block;
   }
   
   .products-grid {
     padding: 2rem;
-    background-color: white;
     width: 100%;
   }
   
@@ -51,7 +48,6 @@
   
   .product-card button {
     background-color: var(--primary-color);
-    color: white;
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
@@ -66,7 +62,6 @@
   .contact-section {
     padding: 2rem;
     background-color: var(--secondary-color);
-    color: white;
     text-align: center;
     width: 100%;
     margin-top: 2rem;
