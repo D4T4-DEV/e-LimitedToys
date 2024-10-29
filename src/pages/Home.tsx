@@ -1,11 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 
+const images = [
+  'src/img/newcollection.png',
+  'src/img/promotional.png',
+  'src/img/freeship.png',
+];
+
 const Home: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Función para cambiar la imagen cada 3 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Función para ir a la imagen anterior o siguiente
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
   return (
     <div className="home">
       <div className="carousel">
-        <img src="src\img\promotional.png" alt="Ofertas" />
+        <button className="carousel-btn prev" onClick={handlePrev}>❮</button>
+        <img src={images[currentIndex]} alt="Ofertas" className="carousel-image" />
+        <button className="carousel-btn next" onClick={handleNext}>❯</button>
       </div>
       <div className="products-grid">
         <h2>Productos Destacados</h2>
@@ -13,7 +41,6 @@ const Home: React.FC = () => {
           {/* Aquí irían los productos */}
         </div>
       </div>
-      {/* Sección de contacto */}
       <section id="contact" className="contact-section">
         <h2>Contacto</h2>
         <p>Si tienes alguna pregunta, por favor contáctanos.</p>
