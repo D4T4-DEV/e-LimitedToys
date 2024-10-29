@@ -8,8 +8,14 @@
 }
 
 .header_logo {
-  font-size: .7rem;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
 }
 
 .header_nav {
