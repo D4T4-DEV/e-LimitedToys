@@ -9,12 +9,17 @@
   overflow: hidden;
 }
 
+.carousel-slide {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
 .carousel img {
   width: 100%;
   max-width: 100%;
   height: auto;
   display: block;
-  transition: transform 0.5s ease;
+  flex-shrink: 0;
 }
 
 .carousel-btn {

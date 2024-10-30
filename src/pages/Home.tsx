@@ -14,7 +14,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -32,7 +32,11 @@ const Home: React.FC = () => {
     <div className="home">
       <div className="carousel">
         <button className="carousel-btn prev" onClick={handlePrev}>❮</button>
-        <img src={images[currentIndex]} alt="Ofertas" className="carousel-image" />
+        <div className="carousel-slide" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+          {images.map((src, index) => (
+            <img key={index} src={src} alt="Ofertas" className="carousel-image" />
+          ))}
+        </div>
         <button className="carousel-btn next" onClick={handleNext}>❯</button>
       </div>
       <div className="products-grid">
