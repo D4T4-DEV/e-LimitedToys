@@ -39,13 +39,13 @@ const Home: React.FC = () => {
         </div>
         <button className="carousel-btn next" onClick={handleNext}>❯</button>
       </div>
-      <div className="products-grid">
+      <div className="text-section">
         <h2>Productos Destacados</h2>
         <div className="product-list">
           {/* Aquí irían los productos */}
         </div>
       </div>
-      <section id="contact" className="contact-section">
+      <section id="contact" className="text-section">
         <h2>Contacto</h2>
         <p>Si tienes alguna pregunta, por favor contáctanos.</p>
         {/* Aquí puedes agregar un formulario o más detalles */}
