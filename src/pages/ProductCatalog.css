@@ -52,17 +52,16 @@
   }
   
   .product-card {
-    background-color: #fff;
+    background-color: #242424;
     padding: 1rem;
-    border: 1px solid #ddd;
     border-radius: 8px;
     text-align: center;
     transition: box-shadow 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
   
   .product-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.45);
   }
   
   .product-card h4 {

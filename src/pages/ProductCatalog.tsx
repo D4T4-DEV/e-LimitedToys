@@ -2,36 +2,36 @@ import React, { useState } from 'react';
 import './ProductCatalog.css';
 
 const sampleProducts = [
-  { id: 1, name: 'Figura de Acción Edición Limitada', category: 'Figuras de Acción', price: 45, available: true },
-  { id: 2, name: 'Coche de Colección Vintage', category: 'Vehículos de Colección', price: 95, available: false },
-  { id: 3, name: 'Muñeca Clásica 1970', category: 'Muñecas de Colección', price: 70, available: true },
-  { id: 4, name: 'Set LEGO Star Wars', category: 'Construcción', price: 40, available: false },
-  { id: 5, name: 'Cartas Pokémon Primera Edición', category: 'Coleccionables', price: 30, available: true },
-  { id: 6, name: 'Figura Funko Pop Rara', category: 'Figuras de Acción', price: 75, available: true },
-  { id: 7, name: 'Juego de Mesa Vintage', category: 'Juegos de Mesa', price: 35, available: true },
-  { id: 8, name: 'Nave de Star Wars Edición Especial', category: 'Vehículos de Colección', price: 100, available: false },
-  { id: 9, name: 'Figura Anime Edición Limitada', category: 'Figuras de Acción', price: 85, available: true },
-  { id: 10, name: 'Pista de Carrera Hot Wheels', category: 'Juegos de Mesa', price: 50, available: true },
-  { id: 11, name: 'Muñeca Barbie de Colección', category: 'Muñecas de Colección', price: 25, available: true },
-  { id: 12, name: 'Figura Transformers Clásico', category: 'Figuras de Acción', price: 68, available: false },
-  { id: 13, name: 'Colección de Cartas Yugioh', category: 'Coleccionables', price: 48, available: true },
-  { id: 14, name: 'Coche de Carrera Colección', category: 'Vehículos de Colección', price: 92, available: true },
-  { id: 15, name: 'Figura de Marvel Edición Exclusiva', category: 'Figuras de Acción', price: 76, available: true },
-  { id: 16, name: 'Edición Monopoly Star Wars', category: 'Juegos de Mesa', price: 100, available: false },
-  { id: 17, name: 'Muñeco He-Man 1980', category: 'Figuras de Acción', price: 38, available: true },
-  { id: 18, name: 'Réplica Batimóvil', category: 'Vehículos de Colección', price: 84, available: true },
-  { id: 19, name: 'Juego de Mesa Clue Edición Retro', category: 'Juegos de Mesa', price: 25, available: true },
-  { id: 20, name: 'Miniatura de Colección Harry Potter', category: 'Figuras de Acción', price: 65, available: false },
-  { id: 21, name: 'Figura de Acción Batman Clásico', category: 'Figuras de Acción', price: 28, available: true },
-  { id: 22, name: 'Colección Mini Coches Ferrari', category: 'Vehículos de Colección', price: 55, available: false },
-  { id: 23, name: 'Figura Iron Man Edición Limitada', category: 'Figuras de Acción', price: 82, available: true },
-  { id: 24, name: 'Juego de Mesa Edición Rareza', category: 'Juegos de Mesa', price: 47, available: false },
-  { id: 25, name: 'Figura Transformers Autobot', category: 'Figuras de Acción', price: 75, available: true },
-  { id: 26, name: 'Colección Miniaturas Marvel', category: 'Coleccionables', price: 35, available: true },
-  { id: 27, name: 'Edición Especial Risk 50 Aniversario', category: 'Juegos de Mesa', price: 100, available: true },
-  { id: 28, name: 'Figura Dragon Ball Z Goku', category: 'Figuras de Acción', price: 30, available: false },
-  { id: 29, name: 'Cartas Coleccionables NBA', category: 'Coleccionables', price: 45, available: true },
-  { id: 30, name: 'Figura de Acción Retro Power Rangers', category: 'Figuras de Acción', price: 77, available: true },
+  { id: 1, name: 'Figura de Acción Dragon Ball Z', category: 'Bandai', price: 45, available: true },
+  { id: 2, name: 'Figura My Hero Academia', category: 'Banpresto', price: 95, available: false },
+  { id: 3, name: 'Nendoroid Naruto', category: 'Good Smile', price: 70, available: true },
+  { id: 4, name: 'Figura One Piece Luffy', category: 'Banpresto', price: 40, available: false },
+  { id: 5, name: 'Figura de Colección Demon Slayer', category: 'Bandai', price: 30, available: true },
+  { id: 6, name: 'Figura Funko Pop Marvel', category: 'Funko', price: 75, available: true },
+  { id: 7, name: 'Youtooz Spongebob', category: 'Youtooz', price: 35, available: true },
+  { id: 8, name: 'Figura Funko Pop Star Wars', category: 'Funko', price: 100, available: false },
+  { id: 9, name: 'Figura Hatsune Miku', category: 'Good Smile', price: 85, available: true },
+  { id: 10, name: 'Figura Youtooz Rick & Morty', category: 'Youtooz', price: 50, available: true },
+  { id: 11, name: 'Figura de Anime Naruto', category: 'Banpresto', price: 25, available: true },
+  { id: 12, name: 'Figura Gundam', category: 'Bandai', price: 68, available: false },
+  { id: 13, name: 'Nendoroid Overwatch', category: 'Good Smile', price: 48, available: true },
+  { id: 14, name: 'Figura de One Piece Zoro', category: 'Banpresto', price: 92, available: true },
+  { id: 15, name: 'Figura de Deadpool', category: 'Funko', price: 76, available: true },
+  { id: 16, name: 'Figura Star Wars Baby Yoda', category: 'Funko', price: 100, available: false },
+  { id: 17, name: 'Figura Tokyo Ghoul', category: 'Good Smile', price: 38, available: true },
+  { id: 18, name: 'Figura Saint Seiya', category: 'Bandai', price: 84, available: true },
+  { id: 19, name: 'Youtooz Avatar: The Last Airbender', category: 'Youtooz', price: 25, available: true },
+  { id: 20, name: 'Figura Funko Pop Harry Potter', category: 'Funko', price: 65, available: false },
+  { id: 21, name: 'Figura de Tokyo Revengers', category: 'Banpresto', price: 28, available: true },
+  { id: 22, name: 'Figura Dragon Ball Super', category: 'Bandai', price: 55, available: false },
+  { id: 23, name: 'Figura Iron Man', category: 'Funko', price: 82, available: true },
+  { id: 24, name: 'Nendoroid Kirby', category: 'Good Smile', price: 47, available: false },
+  { id: 25, name: 'Figura Transformers', category: 'Youtooz', price: 75, available: true },
+  { id: 26, name: 'Figura My Hero Academia Deku', category: 'Banpresto', price: 35, available: true },
+  { id: 27, name: 'Figura Evangelion Unit-01', category: 'Good Smile', price: 100, available: true },
+  { id: 28, name: 'Figura Dragon Ball Z Goku', category: 'Bandai', price: 30, available: false },
+  { id: 29, name: 'Figura Rick & Morty', category: 'Youtooz', price: 45, available: true },
+  { id: 30, name: 'Figura de Acción Retro Power Rangers', category: 'Bandai', price: 77, available: true },
   // Productos de ejemplo para verificar la visualización de los productos
 ];
 
@@ -56,12 +56,11 @@ const ProductCatalog: React.FC = () => {
           <label>Categoría:</label>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="">Todas</option>
-            <option value="Figuras de Acción">Figuras de Acción</option>
-            <option value="Vehículos de Colección">Vehículos de Colección</option>
-            <option value="Muñecas de Colección">Muñecas de Colección</option>
-            <option value="Construcción">Construcción</option>
-            <option value="Coleccionables">Coleccionables</option>
-            <option value="Juegos de Mesa">Juegos de Mesa</option>
+            <option value="Bandai">Bandai</option>
+            <option value="Banpresto">Banpresto</option>
+            <option value="Good Smile">Good Smile</option>
+            <option value="Funko">Funko</option>
+            <option value="Youtooz">Youtooz</option>
           </select>
         </div>
         <div className="filter-group">
