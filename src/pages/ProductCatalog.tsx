@@ -91,7 +91,7 @@ const ProductCatalog: React.FC = () => {
               <div key={product.id} className="product-card">
                 <h4>{product.name}</h4>
                 <p>Categoría: {product.category}</p>
-                <p>${product.price}</p>
+                <p className='price'>${product.price}</p>
                 <p>{product.available ? 'Disponible' : 'No disponible'}</p>
               </div>
             ))}

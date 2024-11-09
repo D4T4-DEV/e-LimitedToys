@@ -46,7 +46,7 @@
   
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(385px, 1fr));
     gap: 1.5rem;
     width: 100%;
   }
@@ -66,24 +66,25 @@
   
   .product-card h4 {
     font-size: 1.25rem;
-    color: var(--primary-color);
+    font-style: bold;
+    color: #fffffc;
     margin-bottom: 0.5rem;
   }
   
   .product-card p {
     font-size: 1rem;
-    color: #555;
+    color: #fff;
     margin: 0.5rem 0;
   }
   
   .product-card p.price {
     font-weight: bold;
-    color: var(--primary-color);
+    color: #fffffc;
   }
   
   .no-products {
     font-size: 1.25rem;
-    color: #fff;
+    color: red;
     font-weight: bold;
     text-align: center;
     padding: 1.5rem;
