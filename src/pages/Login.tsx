@@ -1,34 +1,44 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import './Auth.css';
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Correo electronico invalido' }),
+  password: z.string()
+});
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+type FormDataLogin = z.infer<typeof loginSchema>;
+
+const Login: React.FC = () => {
+
+  const { register, handleSubmit, formState: { errors } } = useForm<FormDataLogin>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const handleLogin = async (data: FormDataLogin) => {
     // Lógica para el inicio de sesión
-    console.log('Usuario inició sesión:', { email, password });
+    console.log('Usuario inició sesión:', data);
   };
 
-  return (
+  return (  
     <div className="auth-container">
       <h2>Iniciar sesión</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit(handleLogin)}>
         <input
           type="email"
           placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          {...register("email")}
         />
-        <input
+        {errors.email && <span className="error-message">{errors.email.message}</span>}
+
+        <input  
           type="password"
           placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          {...register("password")}
         />
+        {errors.password && <span className="error-message">{errors.password.message}</span>}
         <button type="submit" className='button-login'>Iniciar sesión</button>
       </form>
       <h3>¿No tienes cuenta? Crea una aquí</h3>
