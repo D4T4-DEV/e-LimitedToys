@@ -1,4 +1,4 @@
-
+/*
 type JsonData = { [key: string]: any }; // -> Objeto JSON 
 type EncryptedData = string; // -> Datos en string 
 
@@ -91,3 +91,5 @@ function hexToArrayBuffer(hex: string): ArrayBuffer {
     }
     return bytes.buffer;
 }
+// SE CAMBIA POR LA ENCRIPTACIÓN RSA
+*/
