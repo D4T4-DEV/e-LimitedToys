@@ -6,6 +6,7 @@ import './Auth.css';
 import { EncriptarDatos } from '../security/Encriptar_data';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import qs from 'qs';
+import { RespuestaApi } from '../Interfaces/Response_API';
 
 const { VITE_BASE_URL_API } = import.meta.env;
 
@@ -36,6 +37,7 @@ const Login: React.FC = () => {
         <input
           type="email"
           placeholder="Correo electrónico"
+          autoComplete='email'
           {...register("email")}
         />
         {errors.email && <span className="error-message">{errors.email.message}</span>}
@@ -54,13 +56,6 @@ const Login: React.FC = () => {
 };
 
 // MEDIO PARA HACER LA PETICIÓN A LA API
-
-type JsonData = { [key: string]: any }; // -> Objeto JSON 
-export interface Respuesta {
-  status: number;
-  message: string;
-  data?: JsonData
-}
 
 const IniciarSesion = async (dataRecibida: any): Promise<void> => {
 
@@ -88,7 +83,7 @@ const IniciarSesion = async (dataRecibida: any): Promise<void> => {
 
   try {
     // tramite y espera de respuesta
-    const response: AxiosResponse<Respuesta> = await axios.request(config);
+    const response: AxiosResponse<RespuestaApi> = await axios.request(config);
     console.log(JSON.stringify(response.data));
   } catch (error) {
     console.error(error); // -> Esto debe ser tratado mejor y no en consola del cliente OJO 
