@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ProductCatalog.css';
 
 const sampleProducts = [
-  { id: 1, name: 'Figura de Acción Dragon Ball Z', category: 'Bandai', price: 45, available: true },
+  { id: 1, name: 'Figura de Acción Dragon Ball Z', category: 'Bandai', price: 45, available: true, image: 'src/img/products/product1.png' },
   { id: 2, name: 'Figura My Hero Academia', category: 'Banpresto', price: 95, available: false },
   { id: 3, name: 'Nendoroid Naruto', category: 'Good Smile', price: 70, available: true },
   { id: 4, name: 'Figura One Piece Luffy', category: 'Banpresto', price: 40, available: false },
@@ -89,6 +89,7 @@ const ProductCatalog: React.FC = () => {
           <div className="products-grid">
             {filteredProducts.map(product => (
               <div key={product.id} className="product-card">
+                <img src={product.image} alt={product.name} className="product-image" />
                 <h4>{product.name}</h4>
                 <p>Categoría: {product.category}</p>
                 <p className='price'>${product.price}</p>
