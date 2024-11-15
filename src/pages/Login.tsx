@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import './Auth.css';
-import { EncriptarDatos } from '../security/Encr_decp';
+import { EncriptarDatos } from '../security/Encriptar_data';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import qs from 'qs';
 
-const { BASE_URL_API_E_LIMITED } = import.meta.env;
+const { VITE_BASE_URL_API } = import.meta.env;
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Correo electronico invalido' }),
@@ -64,16 +64,22 @@ export interface Respuesta {
 
 const IniciarSesion = async (dataRecibida: any): Promise<void> => {
 
+  if(!VITE_BASE_URL_API){
+    throw new Error("No tengo una api a la cual contactarme")
+  }
+
+  const datosEncriptados =  await EncriptarDatos(dataRecibida);
+
   // Creamos los datos en formato application/x-www-form-urlencoded
   const data = qs.stringify({
-    'datos_encriptados': await EncriptarDatos(dataRecibida),
+    'datos_encriptados': datosEncriptados,
   });
 
   // Configuracion de la peticion que generá AXIOS
   const config: AxiosRequestConfig = {
     method: 'POST',
     maxBodyLength: Infinity,
-    url: `${BASE_URL_API_E_LIMITED}/usuarios/login/`,
+    url: `${VITE_BASE_URL_API}/usuarios/login/`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
