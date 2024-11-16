@@ -16,7 +16,7 @@ const sampleProducts = [
   { id: 12, name: 'Figura Gundam', category: 'Bandai', price: 68, available: false },
   { id: 13, name: 'Nendoroid Overwatch', category: 'Good Smile', price: 48, available: true },
   { id: 14, name: 'Figura de One Piece Zoro', category: 'Banpresto', price: 92, available: true },
-  { id: 15, name: 'Figura de Deadpool', category: 'Funko', price: 76, available: true },
+  { id: 15, name: 'Figura de Deadpool with Wolverine Photo', category: 'Funko', price: 76, available: true },
   { id: 16, name: 'Figura Star Wars Baby Yoda', category: 'Funko', price: 100, available: false },
   { id: 17, name: 'Figura Tokyo Ghoul', category: 'Good Smile', price: 38, available: true },
   { id: 18, name: 'Figura Saint Seiya', category: 'Bandai', price: 84, available: true },
@@ -30,7 +30,7 @@ const sampleProducts = [
   { id: 26, name: 'Figura My Hero Academia Deku', category: 'Banpresto', price: 35, available: true },
   { id: 27, name: 'Figura Evangelion Unit-01', category: 'Good Smile', price: 100, available: true },
   { id: 28, name: 'Figura Dragon Ball Z Goku', category: 'Bandai', price: 30, available: false },
-  { id: 29, name: 'Figura Rick & Morty', category: 'Youtooz', price: 45, available: true },
+  { id: 29, name: 'Figura Pickle Rick with Laser', category: 'Funko', price: 45, available: true },
   { id: 30, name: 'Figura de Acción Retro Power Rangers', category: 'Bandai', price: 77, available: true },
   // Productos de ejemplo para verificar la visualización de los productos
 ];
