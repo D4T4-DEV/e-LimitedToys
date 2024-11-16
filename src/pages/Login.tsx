@@ -1,15 +1,15 @@
 import './Auth.css';
 import React from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios /*,{ AxiosResponse }*/ from 'axios';
 import { useForm } from 'react-hook-form';
-import qs from 'qs';
+// import qs from 'qs';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EncriptarDatos } from '../security/Encriptar_data';
-import { RespuestaApi } from '../Interfaces/Response_API';
+// import { RespuestaApi } from '../Interfaces/Response_API';
 import { loginSchema } from '../Interfaces/LoginInterface';
 
-const { VITE_BASE_URL_API } = import.meta.env;
+// const { BASE_URL_API } = import.meta.env;
 
 type FormDataLogin = z.infer<typeof loginSchema>;
 
@@ -21,7 +21,6 @@ const Login: React.FC = () => {
 
   const handleLogin = async (data: FormDataLogin) => {
     // Lógica para el inicio de sesión
-    console.log('Usuario inició sesión:', data);
     await IniciarSesion(data);
   };
 
@@ -51,31 +50,22 @@ const Login: React.FC = () => {
 };
 
 // MEDIO PARA HACER LA PETICIÓN A LA API
-
-const IniciarSesion = async (dataRecibida: any): Promise<void> => {
-
-  if (!VITE_BASE_URL_API) {
-    throw new Error("No tengo una api a la cual contactarme")
-  }
-
+// Esto manejado por el backed de la aplicacion
+const IniciarSesion = async (dataRecibida: FormDataLogin): Promise<void> => {
   const datosEncriptados = await EncriptarDatos(dataRecibida);
-
-  // Creamos los datos en formato application/x-www-form-urlencoded
-  const data = qs.stringify({
-    'datos_encriptados': datosEncriptados,
-  });
-  
   try {
-    // tramite y espera de respuesta
-    const response: AxiosResponse<RespuestaApi> = await axios.post(`${VITE_BASE_URL_API}/usuarios/login/`,data);
-    // console.log((response.data));
-    console.log((response.data));
+    const response = await axios.post('/api/login', {
+      datos_encriptados: datosEncriptados,
+    });
+    console.log(response.data);
   } catch (error) {
-    if(axios.isAxiosError(error)){
-      console.error(error.message); // -> Esto debe ser tratado mejor y no en consola del cliente OJO 
-    }
-    else{
-      console.error(error); // -> Esto debe ser tratado mejor y no en consola del cliente OJO
+    if (axios.isAxiosError(error)) {
+      // Capturar los datos del error si existen
+      const errorData = error.response?.data;
+      console.log("Datos adicionales del error:", errorData || 'Error en la peticion');
+      console.error("Error:", errorData); // -> Esto debe ser tratado mejor y no en consola del cliente OJO
+    } else {
+      console.error("Error no de axios", error); // -> Esto debe ser tratado mejor y no en consola del cliente OJO
     }
   }
 };
