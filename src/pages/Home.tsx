@@ -1,14 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
+import axios from 'axios';
 
-const images = [
-  'src/img/newcollection.png',
-  'src/img/promotional.png',
-  'src/img/freeship.png',
-];
+
 
 const Home: React.FC = () => {
+  const [images, setImages] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const fetchBanners = async (): Promise<void> => {
+    try {
+      const response = await axios.get('/api/obtener-banners');
+      const banners = response.data.data?.bannersImgs || [];
+  
+      // Extraer los valores de img_url
+      const imgUrls = banners.map((banner: { img_url: string }) => banner.img_url);
+
+      // Pasamos al useState el valor de las imagenes que acabamos de obtener
+      setImages(imgUrls);
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response?.data;
+        console.log("Datos adicionales del error:", errorData || 'Error en la petición');
+        console.error("Error:", errorData);
+      } else {
+        console.error("Error no de axios", error);
+      }
+    }
+  };
+
+  // Funcion para obtener las imagenes provenientes de la API
+  useEffect(() => {
+    fetchBanners();
+  }, []);
 
   // Función para cambiar la imagen cada 3 segundos
   useEffect(() => {
@@ -17,7 +42,7 @@ const Home: React.FC = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images]);
 
   // Función para ir a la imagen anterior o siguiente
   const handlePrev = () => {
