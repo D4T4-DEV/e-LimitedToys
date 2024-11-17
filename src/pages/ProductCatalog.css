@@ -61,8 +61,18 @@
   }
   
   .product-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 4px 8px #484848;
   }
+
+  .product-image {
+    width: 100%;
+    max-height: 200px;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    object-fit: contain;
+    background-color: #333;
+  }  
   
   .product-card h4 {
     font-size: 1.25rem;
