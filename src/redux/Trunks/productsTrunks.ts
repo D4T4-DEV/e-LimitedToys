@@ -9,7 +9,7 @@ const { VITE_URL_API } = import.meta.env;
 // Async thunk para obtener los productos destacados de la semana
 export const fetchFeaturedProducts = createAsyncThunk(
     'products/fetchFeaturedProducts',
-    async () => {
+    async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get(`${VITE_URL_API}/productos/get-featured`);
 
@@ -19,8 +19,10 @@ export const fetchFeaturedProducts = createAsyncThunk(
             // Normalizar datos
             return normalize(productosDestacados, productsListSchema);
         } catch (error) {
-            console.error('Error al obtener los productos destacados >:(', error);
-            throw error; // Manejo del error
+            if (axios.isAxiosError(error)) {
+                return rejectWithValue(error.response?.data || "Error en la petición");
+            }
+            return rejectWithValue("Error desconocido");
         }
     }
 );
@@ -28,7 +30,7 @@ export const fetchFeaturedProducts = createAsyncThunk(
 // Async thunk para obtener todos los productos que tienen stock
 export const fetchAllProducts = createAsyncThunk(
     'products/fetchAllProducts',
-    async () => {
+    async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get(`${VITE_URL_API}/productos/get`);
 
@@ -39,8 +41,10 @@ export const fetchAllProducts = createAsyncThunk(
             const normalizedData = normalize(productos, productsListSchema);
             return normalizedData;
         } catch (error) {
-            console.error('Error al obtener los productos', error);
-            throw error; // Manejo del error
+            if (axios.isAxiosError(error)) {
+                return rejectWithValue(error.response?.data || "Error en la petición");
+            }
+            return rejectWithValue("Error desconocido");
         }
     }
 );
