@@ -24,7 +24,7 @@ const ProductCatalog: React.FC = () => {
   const filteredProducts = [
     ...ids.map((id: string) => entities[id]),
     ...allProductsIds.map((id: string) => allProductsEntities[id])
-  ].filter((product: any) => { 
+  ].filter((product: any) => {
     const matchesCategory = category ? product.marca === category : true;
     const matchesPrice = product.precio_producto <= priceRange;
     const matchesAvailability = onlyAvailable ? product.existencia > 0 : true;
@@ -71,7 +71,15 @@ const ProductCatalog: React.FC = () => {
       {/* Contenedor de los productos  */}
       <main className="products-grid-container">
         {status === 'loading' || allProductsStatus === 'loading' ? (
-          <p>Cargando productos...</p>
+          <div
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <img
+              src="src\img\ezgif-5-c06c195611.gif"
+              alt="Cargando productos"
+              className="loading"
+            />
+          </div>
         ) : error ? (
           <p>{error}</p>
         ) :

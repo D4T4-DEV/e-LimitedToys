@@ -100,4 +100,10 @@
     padding: 1.5rem;
     margin: 2rem 0;
   }
+
+  .loading {
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+  }
   
