@@ -1,50 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProductCatalog.css';
-
-const sampleProducts = [
-  { id: 1, name: 'Dragon Ball Flash Vegeta', category: 'Bandai', price: 45, available: true, image: 'src/img/products/product1.png' },
-  { id: 2, name: 'Shoto Todoroki My Hero Academia', category: 'Banpresto', price: 95, available: false, image: 'src/img/products/product2.png' },
-  { id: 3, name: 'Naruto Shippuden Naruto Uzumaki Nendoroid', category: 'Good Smile', price: 70, available: true, image: 'src/img/products/product3.png' },
-  { id: 4, name: 'Monkey D. Luffy One Piece', category: 'Banpresto', price: 40, available: false, image: 'src/img/products/product4.png' },
-  { id: 5, name: 'Demon Slayer Vibration Stars Sanemi Shinazugawa', category: 'Bandai', price: 30, available: true, image: 'src/img/products/product5.png' },
-  { id: 6, name: 'Pop! Spider-Man (Swinging)', category: 'Funko', price: 75, available: true, image: 'src/img/products/product6.png' },
-  { id: 7, name: 'Bob Esponja Shoulder Rider', category: 'Youtooz', price: 35, available: true, image: 'src/img/products/product7.png' },
-  { id: 8, name: 'Pop! Darth Vader 610', category: 'Funko', price: 100, available: false, image: 'src/img/products/product8.png' },
-  { id: 9, name: 'Hatsune Miku: Holographic', category: 'Good Smile', price: 85, available: true, image: 'src/img/products/product9.png' },
-  { id: 10, name: 'Sunflower Plush', category: 'Youtooz', price: 50, available: true, image: 'src/img/products/product10.png' },
-  { id: 11, name: 'Naruto Shipudden Vibration Stars-Hyuga Hinata', category: 'Banpresto', price: 25, available: true, image: 'src/img/products/product11.png' },
-  { id: 12, name: 'MG 1/100 Sengoku Astary Gundam', category: 'Bandai', price: 68, available: false, image: 'src/img/products/product12.png' },
-  { id: 13, name: 'Figma D.Va', category: 'Good Smile', price: 48, available: true, image: 'src/img/products/product13.png' },
-  { id: 14, name: 'Roronoa Zoro', category: 'Banpresto', price: 92, available: true, image: 'src/img/products/product14.png' },
-  { id: 15, name: 'Pop! Deadpool with Wolverine Photo', category: 'Funko', price: 76, available: true, image: 'src/img/products/product15.png' },
-  { id: 16, name: 'Pop! Grogu with Christmas Cookie', category: 'Funko', price: 100, available: false, image: 'src/img/products/product16.png' },
-  { id: 17, name: 'POP UP PARADE Ken Kaneki', category: 'Good Smile', price: 38, available: true, image: 'src/img/products/product17.png' },
-  { id: 18, name: 'Taurus Tauro Aldebaran Original Color Edition Saint Seiya Myth Cloth EX', category: 'Bandai', price: 84, available: true, image: 'src/img/products/product18.png' },
-  { id: 19, name: 'Avatar State Aang', category: 'Youtooz', price: 25, available: true, image: 'src/img/products/product19.png' },
-  { id: 20, name: 'Pop! Harry Potter (Gold)', category: 'Funko', price: 65, available: false, image: 'src/img/products/product20.png' },
-  { id: 21, name: 'Manjiro Sano vol.2', category: 'Banpresto', price: 28, available: true, image: 'src/img/products/product21.png' },
-  { id: 22, name: 'Goku Super Hero Ver.', category: 'Bandai', price: 55, available: false, image: 'src/img/products/product22.png' },
-  { id: 23, name: 'Pop! Iron Man', category: 'Funko', price: 82, available: true, image: 'src/img/products/product23.png' },
-  { id: 24, name: 'Kirby (edición del 30 Aniversario)', category: 'Good Smile', price: 47, available: false, image: 'src/img/products/product24.png' },
-  { id: 25, name: 'Optimus Prime', category: 'Youtooz', price: 75, available: true, image: 'src/img/products/product25.png' },
-  { id: 26, name: 'DX Himiko Toga', category: 'Banpresto', price: 35, available: true, image: 'src/img/products/product26.png' },
-  { id: 27, name: 'MODEROID Evangelion Unit-01', category: 'Good Smile', price: 100, available: true, image: 'src/img/products/product27.png' },
-  { id: 28, name: 'Dragon Stars Maestro Roshi', category: 'Bandai', price: 30, available: false, image: 'src/img/products/product28.png' },
-  { id: 29, name: 'Pickle Rick with Laser', category: 'Funko', price: 45, available: true, image: 'src/img/products/product29.png' },
-  { id: 30, name: 'Retro Morphin Yellow Ranger Trini', category: 'Bandai', price: 77, available: true, image: 'src/img/products/product30.png' },
-  // Productos de ejemplo para verificar la visualización de los productos
-];
+import { AppDispatch, RootState } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllProducts } from '../redux/Trunks/productsTrunks';
 
 const ProductCatalog: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [category, setCategory] = useState<string>('');
-  const [priceRange, setPriceRange] = useState<number>(100);
+  const [priceRange, setPriceRange] = useState<number>(10000);
   const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
 
-  // Función (que no es parte de la API) para filtrar los productos de ejemplo
-  const filteredProducts = sampleProducts.filter(product => {
-    const matchesCategory = category ? product.category === category : true;
-    const matchesPrice = product.price <= priceRange;
-    const matchesAvailability = onlyAvailable ? product.available : true;
+  // Obtener el estado de Redux
+  const { entities, ids, status, error, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+
+  // Aspecto para obtener los productos 
+  useEffect(() => {
+    if (allProductsStatus === 'idle') {
+      dispatch(fetchAllProducts());
+    }
+  }, [dispatch, allProductsStatus]);
+
+  // Filtrar productos usando tanto `entities` como `allProductsEntities`
+  const filteredProducts = [
+    ...ids.map((id: string) => entities[id]),
+    ...allProductsIds.map((id: string) => allProductsEntities[id])
+  ].filter((product: any) => { 
+    const matchesCategory = category ? product.marca === category : true;
+    const matchesPrice = product.precio_producto <= priceRange;
+    const matchesAvailability = onlyAvailable ? product.existencia > 0 : true;
     return matchesCategory && matchesPrice && matchesAvailability;
   });
 
@@ -68,7 +51,7 @@ const ProductCatalog: React.FC = () => {
           <input
             type="range"
             min="25"
-            max="100"
+            max="10000"
             value={priceRange}
             onChange={(e) => setPriceRange(Number(e.target.value))}
           />
@@ -84,22 +67,29 @@ const ProductCatalog: React.FC = () => {
           </label>
         </div>
       </aside>
+
+      {/* Contenedor de los productos  */}
       <main className="products-grid-container">
-        {filteredProducts.length > 0 ? (
-          <div className="products-grid">
-            {filteredProducts.map(product => (
-              <div key={product.id} className="product-card">
-                <img src={product.image} alt={product.name} className="product-image" />
-                <h4>{product.name}</h4>
-                <p>Categoría: {product.category}</p>
-                <p className='price'>${product.price}</p>
-                <p>{product.available ? 'Disponible' : 'No disponible'}</p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="no-products">No se encontraron productos.</div>
-        )}
+        {status === 'loading' || allProductsStatus === 'loading' ? (
+          <p>Cargando productos...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) :
+          filteredProducts.length > 0 ? (
+            <div className="products-grid">
+              {filteredProducts.map(product => (
+                <div key={product.id_producto} className="product-card">
+                  <img src={product.imagenes_producto} alt={product.nombre_producto} className="product-image" />
+                  <h4>{product.nombre_producto}</h4>
+                  <p>Marca: {product.marca}</p>
+                  <p className='price'>${product.precio_producto}</p>
+                  <p>{product.existencia! > 0 ? 'Disponible' : 'Agotado'}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-products">No se encontraron productos.</div>
+          )}
       </main>
     </div>
   );
