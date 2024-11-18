@@ -75,7 +75,7 @@ const ProductCatalog: React.FC = () => {
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <img
-              src="src\img\ezgif-5-c06c195611.gif"
+              src="src\img\ezgif-1-b97dfccf49.gif"
               alt="Cargando productos"
               className="loading"
             />
