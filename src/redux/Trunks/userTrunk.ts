@@ -18,7 +18,7 @@ export const iniciarSesion = createAsyncThunk(
             return response.data?.data; // Devuelve los datos necesarios al estar logeado
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data || "Error en la petición");
+                return rejectWithValue(error.response?.data?.message || "Error en la petición");
             }
             return rejectWithValue("Error desconocido");
         }

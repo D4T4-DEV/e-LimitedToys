@@ -20,7 +20,7 @@ export const fetchFeaturedProducts = createAsyncThunk(
             return normalize(productosDestacados, productsListSchema);
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data || "Error en la petición");
+                return rejectWithValue(error.response?.data?.message || "Error en la petición");
             }
             return rejectWithValue("Error desconocido");
         }
@@ -42,7 +42,7 @@ export const fetchAllProducts = createAsyncThunk(
             return normalizedData;
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data || "Error en la petición");
+                return rejectWithValue(error.response?.data?.message || "Error en la petición");
             }
             return rejectWithValue("Error desconocido");
         }
