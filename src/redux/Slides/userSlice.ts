@@ -24,6 +24,7 @@ export const authSlice = createSlice({
     reducers: {
         cerrarSesion(state) {
             state.currentUser = null;
+            state.profileImage = null;
             state.status = "idle";
             state.error = null;
         },
@@ -50,6 +51,7 @@ export const authSlice = createSlice({
             })
             .addCase(cargarImagenPerfil.rejected, (state, action) => {
                 state.error = action.payload as string;
+                state.profileImage = null; // Limpiar imagen en caso de error esto activaria la imagen predeterminada
             });
     },
 });
