@@ -6,7 +6,7 @@ export interface User {
     password?: string;
     psw_hash?: string;
     nick?: string;
-    prof_pic?: string;
+    url_prof_pic?: string;
     calle?: string;
     colonia?: string;
     ciudad?: string;

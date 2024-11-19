@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../Interfaces/UserInterface";
-import { iniciarSesion } from "../Trunks/userTrunk";
+import { cargarImagenPerfil, iniciarSesion } from "../Trunks/userTrunk";
 
 interface AuthState {
     currentUser: User | null; // Almacenamiento de los datos de usuario
+    profileImage: string | null; // URL de la imagen de perfil
     status: "idle" | "loading" | "succeeded" | "failed"; // Estado de la operacion
     error: string | null; // Error en caso de fallos
 }
@@ -11,6 +12,7 @@ interface AuthState {
 // Estado inicial
 const initialState: AuthState = {
     currentUser: null,
+    profileImage: null,
     status: "idle",
     error: null,
 };
@@ -39,6 +41,14 @@ export const authSlice = createSlice({
             })
             .addCase(iniciarSesion.rejected, (state, action) => {
                 state.status = "failed";
+                state.error = action.payload as string;
+            })
+
+            // Obtener y cargar imagen de perfil
+            .addCase(cargarImagenPerfil.fulfilled, (state, action) => {
+                state.profileImage = action.payload as string; // Guardar la URL de la imagen
+            })
+            .addCase(cargarImagenPerfil.rejected, (state, action) => {
                 state.error = action.payload as string;
             });
     },
