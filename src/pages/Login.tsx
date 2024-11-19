@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { loginSchema } from '../Interfaces/LoginInterface';
 import { iniciarSesion } from '../redux/Trunks/userTrunk';
+import LoadingModal from '../components/LoadignModal';
 
 type FormDataLogin = z.infer<typeof loginSchema>;
 
@@ -27,7 +28,9 @@ const Login: React.FC = () => {
   return (
     <div className="auth-container">
       <h2>Iniciar sesión</h2>
-      {status === "loading" && <p>Iniciando sesión...</p>}
+      {status === "loading" &&
+        <LoadingModal isOpen={status === "loading"} />
+      }
       {status === "failed" && <p className="error-message">Error: {error}</p>}
       {currentUser && <p>Bienvenido, {currentUser.nick}</p>}
       <form onSubmit={handleSubmit(handleLogin)}>
