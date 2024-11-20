@@ -28,6 +28,9 @@ export const authSlice = createSlice({
             state.status = "idle";
             state.error = null;
         },
+        limpiarError(state) {
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -57,5 +60,5 @@ export const authSlice = createSlice({
 });
 
 
-export const { cerrarSesion } = authSlice.actions;
+export const { cerrarSesion, limpiarError } = authSlice.actions;
 export default authSlice.reducer;
