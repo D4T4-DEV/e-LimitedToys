@@ -25,7 +25,11 @@ const Header: React.FC<HeaderProps> = () => {
 
   // Función para redirigir al login
   const handleLoginClick = () => {
-    navigate('/login');
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      navigate('/mi-perfil');
+    } else {
+      navigate('/login');
+    }
   };
 
   // Petición para obtener la imagen de perfil al cargar Redux
