@@ -6,7 +6,7 @@ import defaultUserImgProfile from '../img/default-user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { cargarImagenPerfil } from '../redux/Trunks/userTrunk';
-import loadingGif from '../img/ezgif-5-c06c195611.gif';
+// import loadingGif from '../img/ezgif-5-c06c195611.gif';
 
 interface HeaderProps {
   title?: string;
@@ -57,9 +57,9 @@ const Header: React.FC<HeaderProps> = () => {
   }, [profileImage]);
 
   // Función para manejar errores en la carga de la imagen
-  const handleImageError = () => {
-    setImageSrc(defaultUserImgProfile); // Cambia a ícono predeterminado si ocurre un error
-  };
+  // const handleImageError = () => {
+  //   setImageSrc(defaultUserImgProfile); // Cambia a ícono predeterminado si ocurre un error
+  // };
 
   return (
     <header className="header">
