@@ -32,6 +32,14 @@ const Header: React.FC<HeaderProps> = () => {
     }
   };
 
+  const handleShoppingCartClick = () => {
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      navigate('/mi-carrito');
+    } else {
+      navigate('/login');
+    }
+  };
+
   // Petición para obtener la imagen de perfil al cargar Redux
   useEffect(() => {
     if (currentUser) {
@@ -84,7 +92,7 @@ const Header: React.FC<HeaderProps> = () => {
         aria-label="Buscar productos"
       />
       <div className="icons">
-      <span className="icon">
+        <span className="icon" onClick={handleShoppingCartClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -97,42 +105,46 @@ const Header: React.FC<HeaderProps> = () => {
           </svg>
         </span>
         {currentUser ? (
-          imageSrc ? (
-            <span className="icon">
+          <span className="icon" onClick={handleLoginClick}>
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt="Perfil"
+                className="profile-image"
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+            ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 fill="currentColor"
-                className="bag"
+                className="user"
                 viewBox="0 0 16 16"
               >
-                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z" />
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                <path
+                  fillRule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
+                />
               </svg>
-            </span>
-          ) : (
-            <img
-              src={loadingGif}
-              alt="Cargando"
-              className="loading"
-              style={{ width: '10px', height: '10px' }}
-            />
-          )
+            )}
+          </span>
         ) : (
           <span className="icon" onClick={handleLoginClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
               height="24"
+              width="24"
+              viewBox="0 -960 960 960"
               fill="currentColor"
-              className="user"
-              viewBox="0 0 16 16"
             >
-              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-              <path
-                fillRule="evenodd"
-                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-              />
+              <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
             </svg>
           </span>
         )}
