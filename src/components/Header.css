@@ -61,10 +61,14 @@
   font-size: 1rem;
 }
 
-.icons span {
-  font-size: 1.5rem;
-  margin-left: 1rem;
+.icon {
+  background: none;
+  border: none;
   cursor: pointer;
+  padding: 0;
+  margin-left: 3rem;
+  color: #fff;
+  font-size: 1.5rem;
 }
 
 @media only screen and (max-width: 600px) {
