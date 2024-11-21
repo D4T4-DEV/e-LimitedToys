@@ -13,6 +13,8 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { limpiarError } from '../redux/Slides/userSlice';
 import { limpiarErroresMensaje } from '../redux/Slides/erroresSlice';
+import { CloseButtonTostify } from '../components/buttonForTostify';
+
 
 type FormDataLogin = z.infer<typeof loginSchema>;
 
@@ -56,11 +58,7 @@ const Login: React.FC = () => {
         progress: undefined,
         theme: "dark",
         transition: Bounce,
-        closeButton: (
-          <button style={{ all: "unset", cursor: "pointer", color: 'grey'}}>
-            &#10006;
-          </button>
-        ),
+        closeButton: <CloseButtonTostify />,
       });
       dispatch(limpiarError());
     }
@@ -75,11 +73,7 @@ const Login: React.FC = () => {
         progress: undefined,
         theme: "dark",
         transition: Bounce,
-        closeButton: (
-          <button style={{ all: "unset", cursor: "pointer", color: 'grey'}}>
-            &#10006;
-          </button>
-        ),
+        closeButton: <CloseButtonTostify />,
       });
       dispatch(limpiarErroresMensaje());
     }
