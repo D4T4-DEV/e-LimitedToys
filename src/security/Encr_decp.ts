@@ -1,95 +1,71 @@
-/*
-type JsonData = { [key: string]: any }; // -> Objeto JSON 
-type EncryptedData = string; // -> Datos en string 
+import Cookies from "js-cookie";
 
-const { AES_PRIVATE_KEY } = import.meta.env;
+// Funciones para cifrar y descifrar
+export async function encryptSessionIndicator(value: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const key = await getOrGenerateKey();
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encodedValue = encoder.encode(value);
 
-async function getCryptoKey(): Promise<CryptoKey> {
-    if (!AES_PRIVATE_KEY) {
-        throw new Error('La clave AES_PRIVATE_KEY no está definida o está vacía');
-    }
-
-    try {
-        // Decodifica la clave desde Base64 y conviértela a un Uint8Array para Web Crypto API
-        const keyBuffer = Uint8Array.from(atob(AES_PRIVATE_KEY), c => c.charCodeAt(0));
-        return await crypto.subtle.importKey(
-            'raw',
-            keyBuffer,
-            { name: 'AES-GCM' },
-            false,
-            ['encrypt', 'decrypt']
-        );
-    } catch (error) {
-        throw new Error('La clave AES_PRIVATE_KEY no está en formato Base64 o es inválida');
-    }
-}
-
-export async function EncriptarDatos(JSON_DATA: JsonData): Promise<EncryptedData> {
-    const TXT_DATA = JSON.stringify(JSON_DATA);
-    const key = await getCryptoKey();
-
-    // Genera un IV aleatorio de 16 bytes (128 bits) para AES-GCM
-    const iv = crypto.getRandomValues(new Uint8Array(16));
-
-    // Encripta el texto
     const encrypted = await crypto.subtle.encrypt(
-        {
-            name: 'AES-GCM',
-            iv: iv
-        },
+        { name: "AES-GCM", iv },
         key,
-        new TextEncoder().encode(TXT_DATA)
+        encodedValue
     );
 
-    const authTag = encrypted.slice(encrypted.byteLength - 16); // Últimos 16 bytes como AuthTag
-    const ciphertext = encrypted.slice(0, encrypted.byteLength - 16);
-
-    // Convierte IV, AuthTag y el texto encriptado a hexadecimal
-    return `${arrayBufferToHex(iv)}:${arrayBufferToHex(authTag)}:${arrayBufferToHex(ciphertext)}`;
+    const encryptedContent = new Uint8Array(encrypted);
+    return btoa(String.fromCharCode(...iv) + String.fromCharCode(...encryptedContent));
 }
 
-// Nueva función para desencriptar datos en el cliente
-export async function DesencriptarDatos(STRING_DATA: EncryptedData): Promise<JsonData> {
-    const [ivHex, authTagHex, encryptedHex] = STRING_DATA.split(':');
-    const key = await getCryptoKey();
+export async function decryptSessionIndicator(value: string): Promise<string> {
+    const key = await getOrGenerateKey();
+    const data = atob(value);
 
-    // Convierte IV, AuthTag y texto encriptado de hexadecimal a ArrayBuffer
-    const iv = hexToArrayBuffer(ivHex);
-    const authTag = hexToArrayBuffer(authTagHex);
-    const encrypted = hexToArrayBuffer(encryptedHex);
+    const iv = new Uint8Array(data.slice(0, 12).split("").map((c) => c.charCodeAt(0)));
+    const encryptedContent = new Uint8Array(
+        data.slice(12).split("").map((c) => c.charCodeAt(0))
+    );
 
-    // Combina el texto encriptado y la etiqueta de autenticación en un solo ArrayBuffer
-    const encryptedWithAuthTag = new Uint8Array(encrypted.byteLength + authTag.byteLength);
-    encryptedWithAuthTag.set(new Uint8Array(encrypted), 0);
-    encryptedWithAuthTag.set(new Uint8Array(authTag), encrypted.byteLength);
-
-    // Desencripta el texto encriptado
     const decrypted = await crypto.subtle.decrypt(
-        {
-            name: 'AES-GCM',
-            iv: iv
-        },
+        { name: "AES-GCM", iv },
         key,
-        encryptedWithAuthTag
+        encryptedContent
     );
 
-    // Convierte el texto desencriptado a JSON
-    return JSON.parse(new TextDecoder().decode(decrypted));
+    return new TextDecoder().decode(decrypted);
 }
 
-// Utilidades para convertir entre ArrayBuffer y hexadecimal
-function arrayBufferToHex(buffer: ArrayBuffer): string {
-    return Array.from(new Uint8Array(buffer))
-        .map(byte => byte.toString(16).padStart(2, '0'))
-        .join('');
-}
+// Generar clave segura o cargarla de sessionStorage
+async function getOrGenerateKey(): Promise<CryptoKey> {
+    try {
+        const storedKey = Cookies.get("sessionKey");
+        if (storedKey) {
+            const rawKey = Uint8Array.from(atob(storedKey), (c) => c.charCodeAt(0));
+            return crypto.subtle.importKey("raw", rawKey, { name: "AES-GCM" }, true, [
+                "encrypt",
+                "decrypt",
+            ]);
+        }
 
-function hexToArrayBuffer(hex: string): ArrayBuffer {
-    const bytes = new Uint8Array(hex.length / 2);
-    for (let i = 0; i < hex.length; i += 2) {
-        bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+        // Genera una nueva clave si no existe
+        const key = await crypto.subtle.generateKey(
+            { name: "AES-GCM", length: 256 },
+            true,
+            ["encrypt", "decrypt"]
+        );
+
+        const exportedKey = await crypto.subtle.exportKey("raw", key);
+        // define el tiempo en una hora (usado para expiración)
+        const expires = new Date(new Date().getTime() + 60 * 60 * 1000); 
+        Cookies.set("sessionKey", btoa(String.fromCharCode(...new Uint8Array(exportedKey))), {
+            expires: expires,
+            secure: true, // Solo disponible en HTTPS
+            sameSite: "Strict", // Evita el uso en solicitudes de terceros
+        });
+
+        return key;
+    } catch (error) {
+        console.error("Failed to get or generate encryption key:", error);
+        throw new Error("Key generation or retrieval failed");
     }
-    return bytes.buffer;
 }
-// SE CAMBIA POR LA ENCRIPTACIÓN RSA
-*/
