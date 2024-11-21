@@ -13,13 +13,28 @@ const errorSlice = createSlice({
     initialState,
     reducers: {
         errorVencimientoToken(state) {
-            state.mensajesError = 'Te redicionarmos por seguridad, vuelve iniciar sesión';
+            state.mensajesError = 'Tu sesión ha caducado, porfavor vuelve a iniciar sesión';
         },
+
+        errorVerPaginaProtegida(state) {
+            state.mensajesError = 'Para poder acceder aquí, necesitas una cuenta';
+        },
+
+        errorQuererComprar(state) {
+            state.mensajesError = 'Para poder comprar, necesitas una cuenta, te invitamos a iniciar sesión o crear una cuenta ❤️';
+        },
+
         limpiarErroresMensaje(state) {
             state.mensajesError = null;
         }
     }
 });
 
-export const { errorVencimientoToken, limpiarErroresMensaje } = errorSlice.actions;
+export const { 
+    errorVencimientoToken, 
+    errorVerPaginaProtegida, 
+    errorQuererComprar, 
+    limpiarErroresMensaje 
+} = errorSlice.actions;
+
 export default errorSlice.reducer;
