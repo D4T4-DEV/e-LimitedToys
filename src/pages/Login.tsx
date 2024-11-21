@@ -7,12 +7,11 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica para el inicio de sesión
     console.log('Usuario inició sesión:', { email, password });
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-container login">
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleLogin}>
         <input
@@ -29,9 +28,16 @@ const Login: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className='button-login'>Iniciar sesión</button>
+        <button type="submit" className="button-login">
+          Iniciar sesión
+        </button>
       </form>
-      <h3>¿No tienes cuenta? Crea una aquí</h3>
+      <h3>
+        ¿No tienes cuenta?{' '}
+        <a href="/signup" className="link-auth">
+          Crea una aquí
+        </a>
+      </h3>
     </div>
   );
 };
