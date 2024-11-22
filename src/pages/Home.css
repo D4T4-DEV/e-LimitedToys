@@ -78,18 +78,33 @@
   flex: 0 0 30%;
   margin: 0 10px;
   text-align: center;
+  background-color: #242424;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.featured-product:hover{
+  box-shadow: 0 4px 8px #484848;
 }
 
 .featured-image {
   width: 100%;
-  max-width: 250px;
+  max-height: 200px;
   height: auto;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  object-fit: contain;
+  background-color: #333;
 }
 
 .featured-caption h4 {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-style: bold;
+  color: #fffffc;
+  margin-bottom: 0.5rem;
 }
 
 .featured-caption p {
