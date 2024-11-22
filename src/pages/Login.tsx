@@ -111,7 +111,6 @@ const Login: React.FC = () => {
           Crea una aquí
         </a>
       </h3>
-      <h3>¿No tienes cuenta? Crea una aquí</h3>
       {/* Contenedor para las notificaciones por toastify este muestra los errores nada mas */}
       <ToastContainer />
     </div>
