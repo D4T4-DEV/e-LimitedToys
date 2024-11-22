@@ -80,7 +80,7 @@ const Login: React.FC = () => {
   }, [status, error, mensajesError, dispatch]);
 
   return (
-    <div className="auth-container">
+    <div className="auth-container login">
       <h2>Iniciar sesión</h2>
       {status === "loading" &&
         <LoadingModal isOpen={status === "loading"} />
@@ -105,6 +105,12 @@ const Login: React.FC = () => {
           Iniciar sesión
         </button>
       </form>
+      <h3>
+        ¿No tienes cuenta?{' '}
+        <a href="/signup" className="link-auth">
+          Crea una aquí
+        </a>
+      </h3>
       <h3>¿No tienes cuenta? Crea una aquí</h3>
       {/* Contenedor para las notificaciones por toastify este muestra los errores nada mas */}
       <ToastContainer />
