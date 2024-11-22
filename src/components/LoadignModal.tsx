@@ -4,9 +4,10 @@ import loadingGif from '../img/ezgif-5-c06c195611.gif';
 
 interface LoadingModalProps {
   isOpen: boolean;
+  mensaje?: string;
 }
 
-const LoadingModal: React.FC<LoadingModalProps> = ({ isOpen }) => {
+const LoadingModal: React.FC<LoadingModalProps> = ({ isOpen, mensaje = 'Cargando, por favor espera...' }) => {
   if (!isOpen) return null;
 
   return (
@@ -17,7 +18,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({ isOpen }) => {
           alt="Cargando recursos"
           className="loading"
         />
-        <p>Cargando, por favor espera...</p>
+        <p>{mensaje}</p>
       </div>
     </div>
   );
