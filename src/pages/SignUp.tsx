@@ -11,18 +11,25 @@ import { useDispatch } from 'react-redux';
 import { checkoutEmail } from '../redux/Trunks/checkoutDataTrunk';
 import { cleanAllCheckouts } from '../redux/Slides/checksDataSlice';
 import LoadingModal from '../components/LoadignModal';
+import { subirImagenPerfil } from '../redux/Trunks/accionesVariasThunk';
+import { registrarUsuario } from '../redux/Trunks/userTrunk';
+import { useNavigate } from 'react-router-dom';
 
 type FormDataSignUp = z.infer<typeof UserSignUpSchema>;
 
 const SignUp: React.FC = () => {
-  const [step, setStep] = useState(1);
-  const [exiting, setExiting] = useState(false);
-  const [isOpenLoading, setIsOpenLoading] = useState(false);
-  const [mensajeModal, setMensajeModal] = useState<string | undefined>(undefined);
-  const [errorMessages, setErrorMessages] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1); // Paso actual del formulario.
+  const [exiting, setExiting] = useState(false); // Controla las transiciones entre pasos.
+  const [isOpenLoading, setIsOpenLoading] = useState(false); // Modal de carga.
+  const [mensajeModal, setMensajeModal] = useState<string | undefined>(undefined); // Mensaje del modal.
+  const [errorMessages, setErrorMessages] = useState<string | null>(null); // Mensajes de error.
+  const [image, setImage] = useState<File | null>(null); // Imagen de perfil seleccionada.
+  const [preview, setPreview] = useState<string | null>(null); // Vista previa de la imagen.
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>(); // Medio que se utiliza en el desapachador
 
+  // Valores de inicio del formulario
   const [formData, setFormData] = useState<FormDataSignUp>({
     nombres: '',
     apellidos: '',
@@ -64,53 +71,16 @@ const SignUp: React.FC = () => {
     }
   }, [errorMessages]);
 
-  const handleNextStep = async (data: FormDataSignUp) => {
-    setFormData((prev) => ({ ...prev, ...data }));
-    setIsOpenLoading(true);
-    setMensajeModal('Checando si existe el correo...');
-    const resultAction = await dispatch(checkoutEmail(data.email));
-
-    if (checkoutEmail.fulfilled.match(resultAction)) {
-      setIsOpenLoading(false);
-
-      const isEmailRegistered = resultAction.payload;
-
-      if (isEmailRegistered) {
-        generateWarningTostify('El correo ya está registrado.');
-        return;
-      }
-
-      setExiting(true);
-      setTimeout(() => {
-        setExiting(false);
-        setStep(2);
-      }, 500);
-    } else if (checkoutEmail.rejected.match(resultAction)) {
-      setIsOpenLoading(false);
-      const errorMessage = resultAction.error.message || 'Error al verificar el correo electrónico.';
-      generateWarningTostify(errorMessage);
+  // Cambio y renderizado de la imagen
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // Genera vista previa
     }
   };
 
-  const handleSignUp = (data: FormDataSignUp) => {
-    const normalizedData = {
-      ...formData,
-      ...data,
-    };
-    console.log('Datos completos del registro:', normalizedData);
-
-    setIsOpenLoading(true);
-    setMensajeModal('Registrando...');
-
-    setExiting(true);
-    setTimeout(() => {
-      setIsOpenLoading(false);
-      setMensajeModal(undefined);
-      setExiting(false);
-      console.log('Registro exitoso.');
-    }, 500);
-  };
-
+  // Retrocede a los valores anteriores del formulario
   const handlePreviousStep = () => {
     dispatch(cleanAllCheckouts());
     setExiting(true);
@@ -118,8 +88,107 @@ const SignUp: React.FC = () => {
     setTimeout(() => {
       reset(formData, { keepErrors: false });
       setExiting(false);
-      setStep(1);
+      setStep(step - 1);
     }, 500);
+  };
+
+  // Avanza a los siguientes valores del formulario
+  const handleNextStep = async (data: FormDataSignUp) => {
+    setFormData((prev) => ({ ...prev, ...data }));
+
+    // Si esta en el primer paso aqui, verificamos que no este registrado
+    if (step === 1) {
+      setIsOpenLoading(true);
+      setMensajeModal('Checando si existe el correo...');
+      const resultAction = await dispatch(checkoutEmail(data.email));
+
+      if (checkoutEmail.fulfilled.match(resultAction)) {
+        setIsOpenLoading(false);
+
+        const isEmailRegistered = resultAction.payload;
+
+        if (isEmailRegistered) {
+          generateWarningTostify('El correo ya está registrado.');
+          return;
+        }
+
+      } else if (checkoutEmail.rejected.match(resultAction)) {
+        setIsOpenLoading(false);
+        const errorMessage = resultAction.error.message || 'Error al verificar el correo electrónico.';
+        generateWarningTostify(errorMessage);
+      }
+    }
+
+    setExiting(true);
+    setTimeout(() => {
+      setExiting(false);
+      setStep(step + 1);
+    }, 500);
+
+  };
+
+  // Acciones que se ejecutaran al darle al boton de registrarse
+  const handleSignUp = async (data: FormDataSignUp) => {
+    try {
+      // Filtramos para quitar el campo confirmar contraseña
+      const { confirmPassword, ...filteredData } = {
+        ...formData,
+        ...data,
+      };
+
+      // Tomamos los datos filtrados y normalizados por el esquema
+      const normalizedData = { ...filteredData };
+
+      // Abrimos el modal de carga
+      setIsOpenLoading(true);
+
+      // Si hay imagen, la subimos
+      if (image) {
+        setMensajeModal('Subiendo la imagen...');
+        const resultAction = await dispatch(subirImagenPerfil(image));
+
+        // Manejor de la respuesta de la subida
+        if (subirImagenPerfil.fulfilled.match(resultAction)) {
+          const uploadCorrect = resultAction.payload;
+
+          if (!uploadCorrect) {
+            throw new Error('Tuvimos problemas para subir la imagen, inténtalo más tarde');
+          }
+
+          normalizedData.prof_pic = uploadCorrect;
+        } else if (subirImagenPerfil.rejected.match(resultAction)) {
+          const errorMessage = resultAction.error.message || 'Error al subir la imagen.';
+          throw new Error(errorMessage);
+        }
+      }
+
+      // Cambiamos el texto del modal
+      setMensajeModal('Registrando...');
+      const resultAction = await dispatch(registrarUsuario(normalizedData));
+
+      if (registrarUsuario.fulfilled.match(resultAction)) {
+        const isRegistered = resultAction.payload;
+
+        if (isRegistered) {
+          throw new Error('No pudimos registrarte, inténtalo más tarde');
+        }
+
+        // Redirigir al login
+        navigate('/login');
+      } else if (registrarUsuario.rejected.match(resultAction)) {
+        const errorMessage = resultAction.error.message || 'Error al registrarte.';
+        throw new Error(errorMessage);
+      }
+
+    } catch (error) {
+      // Manejo centralizado de errores
+      generateWarningTostify(error instanceof Error ? error.message : 'Ocurrió un error inesperado.');
+    } finally {
+      // Restaurar el estado
+      setIsOpenLoading(false);
+      setMensajeModal(undefined);
+      setExiting(false);
+    }
   };
 
   return (
@@ -128,9 +197,11 @@ const SignUp: React.FC = () => {
       <div className="step-indicator">
         <div className={`step-circle ${step === 1 ? 'active' : ''}`} />
         <div className={`step-circle ${step === 2 ? 'active' : ''}`} />
+        <div className={`step-circle ${step === 3 ? 'active' : ''}`} />
       </div>
       <h2>Crear una cuenta</h2>
       <div className="form-container">
+        {/* Paso uno del formulario */}
         {step === 1 && (
           <form
             onSubmit={handleSubmit(handleNextStep)}
@@ -145,17 +216,40 @@ const SignUp: React.FC = () => {
             <button type="submit" className="button-signup">Siguiente</button>
           </form>
         )}
-
+        {/* Paso dos del formulario */}
         {step === 2 && (
           <form
-            onSubmit={handleSubmit(handleSignUp)}
+            onSubmit={handleSubmit(handleNextStep)}
             className={`form-step ${exiting ? 'exiting' : 'active'}`}
           >
+            <p>Aspectos opcionales</p>
             <input type="text" placeholder="Calle" defaultValue={formData.calle} {...register('calle')} />
             <input type="text" placeholder="Colonia" defaultValue={formData.colonia} {...register('colonia')} />
             <input type="text" placeholder="Ciudad" defaultValue={formData.ciudad} {...register('ciudad')} />
             <input type="text" placeholder="País" defaultValue={formData.pais} {...register('pais')} />
             <input type="number" placeholder="Código postal" defaultValue={formData.codigoPostal || ''} {...register('codigoPostal')} />
+            <div className="buttons">
+              <button type="button" className="button-back" onClick={handlePreviousStep}>Anterior</button>
+              <button type="submit" className="button-signup">Siguiente</button>
+
+            </div>
+          </form>
+        )}
+        {/* Paso tres y ultimo del formulario */}
+        {step === 3 && (
+          <form
+            onSubmit={handleSubmit(handleSignUp)}
+            className={`form-step ${exiting ? 'exiting' : 'active'}`}
+          >
+            <p>Aspectos opcionales</p>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '200px' }}>
+              <h3>Vista Previa:</h3>
+              {preview && (
+                <img src={preview} alt="Vista previa" style={{ maxWidth: '125px', maxHeight: '125px', borderRadius: '50%' }} />
+              )}
+            </div>
             <div className="buttons">
               <button type="button" className="button-back" onClick={handlePreviousStep}>Anterior</button>
               <button type="submit" className="button-signup">Registrarse</button>
