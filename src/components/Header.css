@@ -61,8 +61,48 @@
   font-size: 1rem;
 }
 
-.icons span {
-  font-size: 1.5rem;
-  margin-left: 1rem;
+.icon {
+  background: none;
+  border: none;
   cursor: pointer;
+  padding: 0;
+  margin-left: 3rem;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header_logo {
+    order: 1;
+  }
+
+  .icons {
+    order: 2;
+    font-size: 1rem;
+    margin-left: -20px;
+  }
+
+  .search-bar {
+    order: 3;
+    width: 100%;
+    margin-top: 5px; 
+  }
+
+  .header_nav {
+    order: 4;
+    margin-top: 10px;
+    margin-bottom: 10px; 
+  }
+
+  .header_nav-list {
+    display: flex;
+    gap: 3rem;
+    flex-direction: row;
+    align-items: center;
+  }
 }

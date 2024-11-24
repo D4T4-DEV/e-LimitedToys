@@ -25,3 +25,6 @@ dist-ssr
 
 # Eliminación del .env
 .env*
+
+# Debug VSCode
+.vscode/*

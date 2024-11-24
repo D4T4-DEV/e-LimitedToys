@@ -59,43 +59,81 @@
   margin-bottom: 2rem;
 }
 
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
+/* Carrusel de productos destacados */
+.featured-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.5rem;
 }
 
-.product-card {
-  background-color: #f9f9f9;
-  padding: 1rem;
+.featured-slide {
+  display: contents;
+  transition: transform 0.5s ease-in-out;
+}
+
+.featured-product {
+  flex: 0 0 30%;
+  margin: 0 10px;
   text-align: center;
+  background-color: #242424;
+  padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.product-card h3 {
-  font-family: 'Poppins', sans-serif;
+.featured-product:hover{
+  box-shadow: 0 4px 8px #484848;
+}
+
+.featured-image {
+  width: 100%;
+  max-height: 200px;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  object-fit: contain;
+  background-color: #333;
+}
+
+.featured-caption h4 {
   font-size: 1.25rem;
-  margin-top: 1rem;
+  font-style: bold;
+  color: #fffffc;
+  margin-bottom: 0.5rem;
 }
 
-.product-card p {
-  font-size: 1rem;
-  margin: 0.5rem 0;
+.featured-caption p {
+  font-size: 0.9rem;
+  color: var(--primary-color);
 }
 
-.product-card button {
-  background-color: var(--primary-color);
-  padding: 0.5rem 1rem;
+.carouself-btn {
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
   border: none;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  z-index: 10;
+  font-size: 2rem;
 }
 
-.product-card button:hover {
-  background-color: var(--secondary-color);
+.carouself-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carouself-btn.prev {
+  left: 0;
+}
+
+.carouself-btn.next {
+  right: 0;
 }
 
 .text-section {
@@ -132,7 +170,8 @@
 }
 
 .text-section button {
-  background-color: var(--primary-color);
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-50%);
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -142,6 +181,12 @@
 }
 
 .text-section button:hover {
-  background-color: white;
-  color: var(--primary-color);
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+@media only screen and (max-width: 600px) {
+  .carousel-btn{
+    padding: 0.4rem .5rem;
+    font-size: 1rem;
+  }
 }
