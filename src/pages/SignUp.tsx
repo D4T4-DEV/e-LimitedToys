@@ -116,6 +116,7 @@ const SignUp: React.FC = () => {
         setIsOpenLoading(false);
         const errorMessage = resultAction.error.message || 'Error al verificar el correo electrónico.';
         generateWarningTostify(errorMessage);
+        return;
       }
     }
 
