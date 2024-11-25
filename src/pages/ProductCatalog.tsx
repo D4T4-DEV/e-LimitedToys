@@ -7,11 +7,21 @@ import { fetchAllProducts } from '../redux/Trunks/productsTrunks';
 const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [category, setCategory] = useState<string>('');
-  const [priceRange, setPriceRange] = useState<number>(10000);
+  const [priceMin, setPriceMin] = useState<number>(25);
+  const [priceMax, setPriceMax] = useState<number>(100);
   const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   // Obtener el estado de Redux
   const { entities, ids, status, error, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+
+  const openModal = (product: any) => {
+    setSelectedProduct(product);
+  };
+
+  const closeModal = () => {
+    setSelectedProduct(null);
+  };
 
   // Aspecto para obtener los productos 
   useEffect(() => {
@@ -26,7 +36,7 @@ const ProductCatalog: React.FC = () => {
     ...allProductsIds.map((id: string) => allProductsEntities[id])
   ].filter((product: any) => {
     const matchesCategory = category ? product.marca === category : true;
-    const matchesPrice = product.precio_producto <= priceRange;
+    const matchesPrice = product.precio_producto >= priceMin && product.precio_producto <= priceMax;
     const matchesAvailability = onlyAvailable ? product.existencia > 0 : true;
     return matchesCategory && matchesPrice && matchesAvailability;
   });
@@ -47,24 +57,26 @@ const ProductCatalog: React.FC = () => {
           </select>
         </div>
         <div className="filter-group">
-          <label>Rango de precio: ${priceRange}</label>
-          <input
-            type="range"
-            min="25"
-            max="10000"
-            value={priceRange}
-            onChange={(e) => setPriceRange(Number(e.target.value))}
-          />
-        </div>
-        <div className="filter-group">
-          <label>
+        <label>Rango de precios:</label>
+          <div className="price-range">
             <input
-              type="checkbox"
-              checked={onlyAvailable}
-              onChange={(e) => setOnlyAvailable(e.target.checked)}
+              type="number"
+              min="25"
+              max="100"
+              value={priceMin}
+              onChange={(e) => setPriceMin(Number(e.target.value))}
+              placeholder="Mín"
             />
-            Solo disponibles
-          </label>
+            <span> - </span>
+            <input
+              type="number"
+              min="25"
+              max="100"
+              value={priceMax}
+              onChange={(e) => setPriceMax(Number(e.target.value))}
+              placeholder="Máx"
+            />
+          </div>
         </div>
       </aside>
 
@@ -86,7 +98,7 @@ const ProductCatalog: React.FC = () => {
           filteredProducts.length > 0 ? (
             <div className="products-grid">
               {filteredProducts.map(product => (
-                <div key={product.id_producto} className="product-card">
+                <div key={product.id_producto} className="product-card" onClick={() => openModal(product)}>
                   <img src={product.imagenes_producto} alt={product.nombre_producto} className="product-image" />
                   <h4>{product.nombre_producto}</h4>
                   <p>Marca: {product.marca}</p>
@@ -99,6 +111,29 @@ const ProductCatalog: React.FC = () => {
             <div className="no-products">No se encontraron productos.</div>
           )}
       </main>
+      {/* Modal para mostrar los detalles del producto */}
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              &times;
+            </button>
+            <div className="modal-header">
+              <img
+                src={selectedProduct.imagenes_producto}
+                alt={selectedProduct.nombre_producto}
+                className="modal-product-image"
+              />
+            </div>
+            <div className="modal-body">
+              <h1>{selectedProduct.nombre_producto}</h1>
+              <p>{selectedProduct.descripcion}</p>
+              <h3>Descripción de la Franquicia</h3>
+              <p>{selectedProduct.franchiseDescription}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
