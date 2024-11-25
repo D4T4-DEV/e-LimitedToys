@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import bannerReducer from './Slides/bannerSlice';
 import productReducer from './Slides/productSlice';
 import userReducer from './Slides/userSlice';
-import errorReducer from './Slides/erroresSlice';
+import notificationsReducer from './Slides/notificationsSlice';
 import checkoutsReducer from './Slides/checksDataSlice';
 import variosReducer from './Slides/accionesVariasSlice';
 
@@ -11,7 +11,7 @@ export const store = configureStore({
         banners: bannerReducer,
         products: productReducer,
         users: userReducer,
-        errores: errorReducer,
+        notifications: notificationsReducer,
         checks: checkoutsReducer,
         varios: variosReducer,
     }
