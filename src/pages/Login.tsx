@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { limpiarError } from '../redux/Slides/userSlice';
 import { limpiarErroresMensaje } from '../redux/Slides/erroresSlice';
 import { CloseButtonTostify } from '../components/buttonForTostify';
+import { generateErrorTostify, generateWarningTostify } from '../components/TostifyNotifications';
 
 
 type FormDataLogin = z.infer<typeof loginSchema>;
@@ -48,33 +49,11 @@ const Login: React.FC = () => {
   useEffect(() => {
     // Mostrar notificación del error proveniente de la API o otro medio
     if (status === "failed" && error) {
-      toast.error(error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-        closeButton: <CloseButtonTostify />,
-      });
+      generateErrorTostify(error);
       dispatch(limpiarError());
     }
     if (mensajesError) {
-      toast.warning(mensajesError, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-        closeButton: <CloseButtonTostify />,
-      });
+      generateWarningTostify(mensajesError);
       dispatch(limpiarErroresMensaje());
     }
   }, [status, error, mensajesError, dispatch]);
