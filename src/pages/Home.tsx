@@ -11,11 +11,21 @@ const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { images, status: bannersStatus, error: bannersError } = useSelector((state: RootState) => state.banners);
   const { featuredEntities, featuredIds, status: productsStatus, error: productsError } = useSelector((state: RootState) => state.products);
-  
+
   //Aspecto para cambiar lo mostrado (img o productos)
   const [currentIndex, setCurrentIndex] = useState(0);
   const [featuredIndex, setFeaturedIndex] = useState(0);
-  
+
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
+  const openModal = (product: any) => {
+    setSelectedProduct(product);
+  };
+
+  const closeModal = () => {
+    setSelectedProduct(null);
+  };
+
   // Uso de useMemo para evitar el sobre calculo ya que estos siempre serian estaticos entre las diferentes semanas
   const productosDestacados = useMemo(() => {
     return featuredIds.map(id => featuredEntities[id]); // Obtenemos su valor dado el id
@@ -45,7 +55,7 @@ const Home: React.FC = () => {
       return () => clearInterval(interval);
     }
   }, [images]);
-  
+
   // Función para ir a la imagen anterior o siguiente
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
@@ -113,7 +123,7 @@ const Home: React.FC = () => {
             </button>
             <div className="featured-slide">
               {visibleProducts.map((product) => (
-                <div key={product.id_producto} className="featured-product">
+                <div key={product.id_producto} className="featured-product" onClick={() => openModal(product)}>
                   {/* Solo muestra la primera imagen del producto */}
                   {product.imagenes_producto && product.imagenes_producto.length > 0 && (
                     <img
@@ -140,6 +150,29 @@ const Home: React.FC = () => {
         <h2>Contacto</h2>
         <p>Si tienes alguna pregunta, por favor contáctanos.</p>
       </section>
+      {/* Modal para mostrar los detalles del producto */}
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              &times;
+            </button>
+            <div className="modal-header">
+              <img
+                src={selectedProduct.imagenes_producto}
+                alt={selectedProduct.nombre_producto}
+                className="modal-product-image"
+              />
+            </div>
+            <div className="modal-body">
+              <h1>{selectedProduct.nombre_producto}</h1>
+              <p>{selectedProduct.descripcion}</p>
+              <h3>Descripción de la Franquicia</h3>
+              <p>{selectedProduct.franchiseDescription}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
