@@ -9,12 +9,11 @@ import { loginSchema } from '../Interfaces/LoginInterface';
 import { iniciarSesion } from '../redux/Trunks/userTrunk';
 import LoadingModal from '../components/LoadignModal';
 import { useNavigate } from 'react-router-dom';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { limpiarError } from '../redux/Slides/userSlice';
-import { limpiarErroresMensaje } from '../redux/Slides/erroresSlice';
-import { CloseButtonTostify } from '../components/buttonForTostify';
-import { generateErrorTostify, generateWarningTostify } from '../components/TostifyNotifications';
+import { limpiarErroresMensaje } from '../redux/Slides/notificationsSlice';
+import { generateErrorTostify, generateInfoTostify, generateWarningTostify } from '../components/TostifyNotifications';
 
 
 type FormDataLogin = z.infer<typeof loginSchema>;
@@ -26,8 +25,8 @@ const Login: React.FC = () => {
     (state: RootState) => state.users
   );
 
-  const { mensajesError } = useSelector(
-    (state: RootState) => state.errores
+  const { mensajesNotificacion } = useSelector(
+    (state: RootState) => state.notifications
   );
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormDataLogin>({
@@ -52,11 +51,11 @@ const Login: React.FC = () => {
       generateErrorTostify(error);
       dispatch(limpiarError());
     }
-    if (mensajesError) {
-      generateWarningTostify(mensajesError);
+    if (mensajesNotificacion) {
+      generateInfoTostify(mensajesNotificacion);
       dispatch(limpiarErroresMensaje());
     }
-  }, [status, error, mensajesError, dispatch]);
+  }, [status, error, mensajesNotificacion, dispatch]);
 
   return (
     <div className="auth-container login">

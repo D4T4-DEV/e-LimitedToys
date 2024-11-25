@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { cerrarSesion } from "../redux/Slides/userSlice";
-import { errorVencimientoToken } from "../redux/Slides/erroresSlice";
+import { errorVencimientoToken } from "../redux/Slides/notificationsSlice";
 
 const useMonitorCookie = (cookieName: string, redirectPath: string = "/login") => {
     const navigate = useNavigate();
