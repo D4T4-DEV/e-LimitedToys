@@ -6,6 +6,8 @@ import defaultUserImgProfile from '../img/default-user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { cargarImagenPerfil } from '../redux/Trunks/userTrunk';
+import { cerrarSesion } from '../redux/Slides/userSlice';
+import { msgCerrarSesion } from '../redux/Slides/notificationsSlice';
 // import loadingGif from '../img/ezgif-5-c06c195611.gif';
 
 interface HeaderProps {
@@ -38,6 +40,16 @@ const Header: React.FC<HeaderProps> = () => {
     } else {
       navigate('/login');
     }
+  };
+
+  // Función para redirigir al login
+  const handleLogoutClick = () => {
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      dispatch(cerrarSesion());
+      dispatch(msgCerrarSesion());
+      navigate('/login');
+    } 
+    return;
   };
 
   // Petición para obtener la imagen de perfil al cargar Redux
@@ -145,6 +157,18 @@ const Header: React.FC<HeaderProps> = () => {
               fill="currentColor"
             >
               <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+            </svg>
+          </span>
+        )}
+        {currentUser && (
+          <span className="icon" onClick={handleLogoutClick}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              height="24" 
+              width="24"
+              viewBox="0 -960 960 960" 
+              fill="currentColor">
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
             </svg>
           </span>
         )}
