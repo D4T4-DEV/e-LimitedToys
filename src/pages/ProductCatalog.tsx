@@ -6,14 +6,14 @@ import { fetchAllProducts } from '../redux/Trunks/productsTrunks';
 
 const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [category, setCategory] = useState<string>('');
-  const [priceMin, setPriceMin] = useState<number>(25);
-  const [priceMax, setPriceMax] = useState<number>(100);
-  const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [category, setCategory] = useState<string>(''); // Define la categoria (marca)
+  const [priceMin, setPriceMin] = useState<string | number>(25); // Define el precio minimo
+  const [priceMax, setPriceMax] = useState<string | number>(100); // Define el precio maximo 
+  const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false); // Define si solo si esta disponible o no
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); // Medio usado para mostrar el detalle del producto
 
   // Obtener el estado de Redux
-  const { entities, ids, status, error, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+  const { entities, ids, status, allProductsError, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
 
   const openModal = (product: any) => {
     setSelectedProduct(product);
@@ -21,6 +21,18 @@ const ProductCatalog: React.FC = () => {
 
   const closeModal = () => {
     setSelectedProduct(null);
+  };
+
+  // Vigilancia del valor minimo (previene valores negativos)
+  const handlePriceMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPriceMin(value === "" ? "" : Math.max(0, Number(value)));
+  };
+
+  // Vigilancia del valor maximo (previene valores negativos)
+  const handlePriceMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPriceMax(value === "" ? "" : Math.max(0, Number(value)));
   };
 
   // Aspecto para obtener los productos 
@@ -57,14 +69,14 @@ const ProductCatalog: React.FC = () => {
           </select>
         </div>
         <div className="filter-group">
-        <label>Rango de precios:</label>
+          <label>Rango de precios:</label>
           <div className="price-range">
             <input
               type="number"
               min="25"
               max="100"
-              value={priceMin}
-              onChange={(e) => setPriceMin(Number(e.target.value))}
+              value={priceMin === "" ? "" : priceMin}
+              onChange={handlePriceMinChange}
               placeholder="Mín"
             />
             <span> - </span>
@@ -72,8 +84,8 @@ const ProductCatalog: React.FC = () => {
               type="number"
               min="25"
               max="100"
-              value={priceMax}
-              onChange={(e) => setPriceMax(Number(e.target.value))}
+              value={priceMax === "" ? "" : priceMax}
+              onChange={handlePriceMaxChange}
               placeholder="Máx"
             />
           </div>
@@ -92,8 +104,8 @@ const ProductCatalog: React.FC = () => {
               className="loading"
             />
           </div>
-        ) : error ? (
-          <p>{error}</p>
+        ) : allProductsError ? (
+          <p>{allProductsError}</p>
         ) :
           filteredProducts.length > 0 ? (
             <div className="products-grid">
