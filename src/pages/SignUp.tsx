@@ -158,7 +158,7 @@ const SignUp: React.FC = () => {
 
           normalizedData.prof_pic = uploadCorrect;
         } else if (subirImagenPerfil.rejected.match(resultAction)) {
-          const errorMessage = resultAction.error.message || 'Error al subir la imagen.';
+          const errorMessage = resultAction?.payload as string || 'Error al subir la imagen.';
           throw new Error(errorMessage);
         }
       }
@@ -243,7 +243,7 @@ const SignUp: React.FC = () => {
             className={`form-step ${exiting ? 'exiting' : 'active'}`}
           >
             <p>Aspectos opcionales</p>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+            <input type="file" accept="image/jpeg, image/png, image/webp, image/gif" onChange={handleImageChange} size={10 * 1024 * 1024}/>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '200px' }}>
               <h3>Vista Previa:</h3>
