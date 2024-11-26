@@ -12,16 +12,20 @@ const notificationsSliceSlice = createSlice({
     name: "errorVarius",
     initialState,
     reducers: {
-        errorVencimientoToken(state) {
+        msgVencimientoToken(state) {
             state.mensajesNotificacion = 'Tu sesión ha caducado, porfavor vuelve a iniciar sesión';
         },
 
-        errorVerPaginaProtegida(state) {
+        msgVerPaginaProtegida(state) {
             state.mensajesNotificacion = 'Para poder acceder aquí, necesitas una cuenta';
         },
 
-        errorQuererComprar(state) {
+        msgQuererComprar(state) {
             state.mensajesNotificacion = 'Para poder comprar, necesitas una cuenta, te invitamos a iniciar sesión o crear una cuenta ❤️';
+        },
+
+        msgQuererVerCarrito(state) {
+            state.mensajesNotificacion = 'Para poder usar el carrito, necesitas una cuenta, te invitamos a iniciar sesión o crear una cuenta ❤️';
         },
 
         msgCerrarSesion(state) {
@@ -35,10 +39,11 @@ const notificationsSliceSlice = createSlice({
 });
 
 export const {
-    errorVencimientoToken,
-    errorVerPaginaProtegida,
-    errorQuererComprar,
+    msgVencimientoToken,
+    msgVerPaginaProtegida,
+    msgQuererComprar,
     msgCerrarSesion,
+    msgQuererVerCarrito,
     limpiarErroresMensaje
 } = notificationsSliceSlice.actions;
 
