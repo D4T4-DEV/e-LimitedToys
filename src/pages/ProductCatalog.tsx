@@ -3,6 +3,7 @@ import './ProductCatalog.css';
 import { AppDispatch, RootState } from '../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProducts } from '../redux/Trunks/productsTrunks';
+import { fetchFilterProducts } from '../redux/Trunks/filterThunks';
 
 const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,6 +15,7 @@ const ProductCatalog: React.FC = () => {
 
   // Obtener el estado de Redux
   const { entities, ids, status, allProductsError, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+  const { statusFilter, errorFilter, Marcas, precioMinimo, precioMaximo } = useSelector((state: RootState) => state.filter);
 
   const openModal = (product: any) => {
     setSelectedProduct(product);
@@ -26,13 +28,25 @@ const ProductCatalog: React.FC = () => {
   // Vigilancia del valor minimo (previene valores negativos)
   const handlePriceMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setPriceMin(value === "" ? "" : Math.max(0, Number(value)));
+    const numericValue = Number(value);
+    if (value === "") {
+      setPriceMin("");
+    } else {
+      const validValue = Math.min(Math.max(0, numericValue), Number(precioMaximo));
+      setPriceMin(validValue);
+    }
   };
 
   // Vigilancia del valor maximo (previene valores negativos)
   const handlePriceMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setPriceMax(value === "" ? "" : Math.max(0, Number(value)));
+    const numericValue = Number(value);
+    if (value === "") {
+      setPriceMax("");
+    } else {
+      const validValue = Math.min(Math.max(0, numericValue), Number(precioMaximo));
+      setPriceMax(validValue);
+    }
   };
 
   // Aspecto para obtener los productos 
@@ -40,7 +54,17 @@ const ProductCatalog: React.FC = () => {
     if (allProductsStatus === 'idle') {
       dispatch(fetchAllProducts());
     }
-  }, [dispatch, allProductsStatus]);
+    if (statusFilter === 'idle') {
+      dispatch(fetchFilterProducts());
+    }
+  }, [dispatch, allProductsStatus, statusFilter]);
+
+  useEffect(() => {
+    if (statusFilter === 'succeeded') {
+      setPriceMax(Number(precioMaximo) || 100);
+      setPriceMin(Number(precioMinimo) || 0);
+    }
+  }, [dispatch, statusFilter]);
 
   // Filtrar productos usando tanto `entities` como `allProductsEntities`
   const filteredProducts = [
@@ -52,7 +76,7 @@ const ProductCatalog: React.FC = () => {
     const matchesAvailability = onlyAvailable ? product.existencia > 0 : true;
     return matchesCategory && matchesPrice && matchesAvailability;
   });
-
+  
   return (
     <div className="catalog-container">
       <aside className="filters-panel">
@@ -60,13 +84,11 @@ const ProductCatalog: React.FC = () => {
         <div className="filter-group">
           <label>Categoría:</label>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="">Todas</option>
-            <option value="Bandai">Bandai</option>
-            <option value="Banpresto">Banpresto</option>
-            <option value="Good Smile">Good Smile</option>
-            <option value="Funko">Funko</option>
-            <option value="Youtooz">Youtooz</option>
-          </select>
+          <option value="">Todas</option>
+          {Marcas.map((marca) => (
+            <option key={marca} value={marca}>{marca}</option>
+          ))}
+        </select>
         </div>
         <div className="filter-group">
           <label>Rango de precios:</label>

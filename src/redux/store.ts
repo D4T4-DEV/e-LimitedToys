@@ -5,6 +5,7 @@ import userReducer from './Slides/userSlice';
 import notificationsReducer from './Slides/notificationsSlice';
 import checkoutsReducer from './Slides/checksDataSlice';
 import variosReducer from './Slides/accionesVariasSlice';
+import filterReducer from './Slides/filterSlice';
 
 export const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
         notifications: notificationsReducer,
         checks: checkoutsReducer,
         varios: variosReducer,
+        filter: filterReducer,
     }
 });
 
