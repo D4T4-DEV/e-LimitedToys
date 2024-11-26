@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { cerrarSesion } from "../redux/Slides/userSlice";
-import { errorVencimientoToken } from "../redux/Slides/notificationsSlice";
+import { msgVencimientoToken } from "../redux/Slides/notificationsSlice";
 
 const useMonitorCookie = (cookieName: string, redirectPath: string = "/login") => {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const useMonitorCookie = (cookieName: string, redirectPath: string = "/login") =
 
             // Si la cookie no existe y hay datos de una autenticación
             if (!cookie && currentUser) {
-                dispatch(errorVencimientoToken()); // Establece el mensaje de error
+                dispatch(msgVencimientoToken()); // Establece el mensaje de error
                 dispatch(cerrarSesion()); // Limpia el estado de sesión
                 navigate(redirectPath); // Redirige al usuario
                 clearInterval(interval); // Detiene el monitoreo

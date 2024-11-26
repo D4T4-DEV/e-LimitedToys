@@ -13,7 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { limpiarError } from '../redux/Slides/userSlice';
 import { limpiarErroresMensaje } from '../redux/Slides/notificationsSlice';
-import { generateErrorTostify, generateInfoTostify, generateWarningTostify } from '../components/TostifyNotifications';
+import { generateErrorTostify, generateInfoTostify } from '../components/TostifyNotifications';
 
 
 type FormDataLogin = z.infer<typeof loginSchema>;
