@@ -17,14 +17,19 @@ const storedUser = Cookies.get("isLoggedIn");
 
 let initialUser: User | null = null;
 
-if (storedUser) {
-    try {
-        const decrypted = await decryptSessionIndicator(storedUser);
-        initialUser = JSON.parse(decrypted);
-    } catch (error) {
-        console.error("Failed to decrypt stored user:", error);
+// Función para inicializar el usuario en caso de las cookies existan
+async function initializeUser() {
+    if (storedUser) {
+        try {
+            const decrypted = await decryptSessionIndicator(storedUser);
+            initialUser = JSON.parse(decrypted);
+        } catch (error) {
+            console.error("Failed to decrypt stored user:", error);
+        }
     }
 }
+// Llamada para ejecutar la función
+await initializeUser();
 
 // Estado inicial
 const initialState: AuthState = {
