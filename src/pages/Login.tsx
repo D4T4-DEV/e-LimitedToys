@@ -13,7 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { limpiarError } from '../redux/Slides/userSlice';
 import { limpiarErroresMensaje } from '../redux/Slides/notificationsSlice';
-import { generateErrorTostify, generateInfoTostify } from '../components/TostifyNotifications';
+import { generateErrorTostify, generateInfoTostify, generateWarningTostify } from '../components/TostifyNotifications';
 
 
 type FormDataLogin = z.infer<typeof loginSchema>;
@@ -71,14 +71,12 @@ const Login: React.FC = () => {
           autoComplete="email"
           {...register("email")}
         />
-        {errors.email && <span className="error-message">{errors.email.message}</span>}
+        {errors.email && generateWarningTostify(errors.email.message)}
         <input
           type="password"
           placeholder="Contraseña"
           {...register("password")}
         />
-        {errors.password && <span className="error-message">{errors.password.message}</span>}
-
         <button type="submit" className="button-login">
           Iniciar sesión
         </button>
