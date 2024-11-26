@@ -6,22 +6,17 @@ interface FiltrosState {
   Marcas: string[];
   precioMaximo: string;
   precioMinimo: string;
+  searchTerm: string;
   statusFilter: 'idle' | 'loading' | 'succeeded' | 'failed';
   errorFilter: string | null;
 }
-
-// // Tipo para los datos de actualización
-// interface ActualizarDatosPayload {
-//   Marcas?: string[];
-//   precioMaximo?: string;
-//   precioMinimo?: string;
-// }
 
 // Estado inicial
 const initialState: FiltrosState = {
   Marcas: ["Bandai", "Banpresto", "Good Smile", "Funko", "Youtooz"],
   precioMaximo: "100.00",
   precioMinimo: "25.00",
+  searchTerm: '',
   statusFilter: 'idle',
   errorFilter: null,
 };
@@ -39,6 +34,10 @@ const initialState: FiltrosState = {
       },
       setPrecioMinimo(state, action: PayloadAction<string>) {
         state.precioMinimo = action.payload;
+      },
+      // buscar el termino en el buscador
+      setSearchTerm(state, action: PayloadAction<string>) {
+        state.searchTerm = action.payload;
       },
     },
     extraReducers: (builder) => {
@@ -60,5 +59,5 @@ const initialState: FiltrosState = {
   });
   
   // Exportar acciones y reducer
-  export const { setMarcas, setPrecioMaximo, setPrecioMinimo } = filtrosSlice.actions;
+  export const { setMarcas, setPrecioMaximo, setPrecioMinimo, setSearchTerm } = filtrosSlice.actions;
   export default filtrosSlice.reducer;
