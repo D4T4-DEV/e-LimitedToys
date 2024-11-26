@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 import logoIcon from '../img/logo.png';
 import defaultUserImgProfile from '../img/default-user.png';
@@ -7,20 +7,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { cargarImagenPerfil } from '../redux/Trunks/userTrunk';
 import { cerrarSesion } from '../redux/Slides/userSlice';
-import { msgCerrarSesion } from '../redux/Slides/notificationsSlice';
-// import loadingGif from '../img/ezgif-5-c06c195611.gif';
+import { msgCerrarSesion, msgQuererVerCarrito } from '../redux/Slides/notificationsSlice';
+import { setSearchTerm } from '../redux/Slides/filterSlice';
 
 interface HeaderProps {
   title?: string;
 }
 
 const Header: React.FC<HeaderProps> = () => {
+
+  const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   const { currentUser, profileImage } = useSelector(
     (state: RootState) => state.users
   );
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Estado local para saber que imagen mostrar
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -38,7 +41,21 @@ const Header: React.FC<HeaderProps> = () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       navigate('/mi-carrito');
     } else {
+      dispatch(msgQuererVerCarrito());
       navigate('/login');
+    }
+  };
+
+  // Evento de cambio de datos del formulario
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  // Evento enter en el input de busqueda
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      dispatch(setSearchTerm(inputValue.toLowerCase())); // Pasa el termino buscado a la función que existe en redux
+      navigate('/catalog'); // redirección
     }
   };
 
@@ -48,7 +65,7 @@ const Header: React.FC<HeaderProps> = () => {
       dispatch(cerrarSesion());
       dispatch(msgCerrarSesion());
       navigate('/login');
-    } 
+    }
     return;
   };
 
@@ -68,10 +85,14 @@ const Header: React.FC<HeaderProps> = () => {
     }
   }, [profileImage]);
 
-  // Función para manejar errores en la carga de la imagen
-  // const handleImageError = () => {
-  //   setImageSrc(defaultUserImgProfile); // Cambia a ícono predeterminado si ocurre un error
-  // };
+  // Esto para poder definir si esta mostrando o no un producto buscado para limpiar el campo y el redux
+  useEffect(() => {
+    // Verificamos la ruta corresponda al catalog
+    if (location.pathname != '/catalog') {
+      setInputValue('');
+      dispatch(setSearchTerm(''))
+    }
+  }, [location]);
 
   return (
     <header className="header">
@@ -102,6 +123,9 @@ const Header: React.FC<HeaderProps> = () => {
         type="text"
         placeholder="🔍 Buscar productos..."
         aria-label="Buscar productos"
+        onChange={handleInputChange}
+        onKeyDown={handleKeyPress}
+        value={inputValue}
       />
       <div className="icons">
         <span className="icon" onClick={handleShoppingCartClick}>
@@ -162,13 +186,13 @@ const Header: React.FC<HeaderProps> = () => {
         )}
         {currentUser && (
           <span className="icon" onClick={handleLogoutClick}>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              height="24" 
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
               width="24"
-              viewBox="0 -960 960 960" 
+              viewBox="0 -960 960 960"
               fill="currentColor">
-              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
             </svg>
           </span>
         )}
