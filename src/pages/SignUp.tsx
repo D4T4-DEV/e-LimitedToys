@@ -82,6 +82,13 @@ const SignUp: React.FC = () => {
 
   // Retrocede a los valores anteriores del formulario
   const handlePreviousStep = () => {
+
+    // Verificamos si quiere ir al login
+    if(step === 1){
+      navigate('/login');
+      return;
+    }
+
     dispatch(cleanAllCheckouts());
     setExiting(true);
 
@@ -214,7 +221,10 @@ const SignUp: React.FC = () => {
             <input type="text" placeholder="Nombre de usuario" defaultValue={formData.nick} {...register('nick')} />
             <input type="password" placeholder="Contraseña" {...register('password')} />
             <input type="password" placeholder="Confirmar contraseña" {...register('confirmPassword')} />
-            <button type="submit" className="button-signup">Siguiente</button>
+            <div className="buttons">
+              <button type="button" className="button-back" onClick={handlePreviousStep}>Ir al login</button>
+              <button type="submit" className="button-signup">Siguiente</button>
+            </div>
           </form>
         )}
         {/* Paso dos del formulario */}
@@ -232,7 +242,6 @@ const SignUp: React.FC = () => {
             <div className="buttons">
               <button type="button" className="button-back" onClick={handlePreviousStep}>Anterior</button>
               <button type="submit" className="button-signup">Siguiente</button>
-
             </div>
           </form>
         )}
@@ -243,7 +252,7 @@ const SignUp: React.FC = () => {
             className={`form-step ${exiting ? 'exiting' : 'active'}`}
           >
             <p>Aspectos opcionales</p>
-            <input type="file" accept="image/jpeg, image/png, image/webp, image/gif" onChange={handleImageChange} size={10 * 1024 * 1024}/>
+            <input type="file" accept="image/jpeg, image/png, image/webp, image/gif" onChange={handleImageChange} size={10 * 1024 * 1024} />
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '200px' }}>
               <h3>Vista Previa:</h3>
