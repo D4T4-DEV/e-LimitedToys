@@ -1,0 +1,91 @@
+.myprofile-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.prof-side-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-width: 24%;
+    border-radius: 8px;
+    margin: 2px;
+    background: linear-gradient(135deg, #222, #2a2a2a);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    position: relative;
+    min-height: 70vh;
+    padding: 20px;
+}
+
+.prof-container {
+    min-width: 74%;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #222, #2a2a2a);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    position: relative;
+    min-height: 70vh;
+}
+
+.imgProf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+}
+
+.edit-photo-btn {
+    display: inline-block;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.info-tab {
+    width: 100%;
+    margin: 1px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+}
+
+.info-tab:hover {
+    color: #007bff;
+}
+
+.info-tab.active {
+    color: #007bff;
+    border-top: 1px solid #007bff;
+    border-bottom: 1px solid #007bff;
+}
+
+.info-tab.active::after {
+    content: '';
+    position: absolute;
+    margin-left: 40%;
+    top: 50%;
+    border: solid #007bff;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(-45deg) translateY(-50%);
+}
+
+.prof-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+}
