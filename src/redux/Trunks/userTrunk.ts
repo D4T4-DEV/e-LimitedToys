@@ -49,6 +49,12 @@ export const registrarUsuario = createAsyncThunk(
 export const cargarImagenPerfil = createAsyncThunk(
   "auth/cargarImagenPerfil",
   async (user: User, { rejectWithValue }) => {
+
+
+    if (user.url_prof_pic == null || user.url_prof_pic.endsWith("/null")) {
+      return rejectWithValue("La URL de la imagen de perfil no es válida");
+    }
+    
     if (!user || !user.url_prof_pic || !user.token) {
       return rejectWithValue("Faltan datos del usuario o del token");
     }
@@ -67,6 +73,170 @@ export const cargarImagenPerfil = createAsyncThunk(
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data?.message || "No se pudo cargar la imagen de perfil");
+      }
+      return rejectWithValue("Error desconocido");
+    }
+  }
+);
+
+// Thunk para obtener los datos del perfil del usuario
+export const obtenerDatosDelPerfil = createAsyncThunk(
+  "user/obtenerDatosDelPerfil",
+  async ( user: User, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${VITE_URL_API}/usuarios/obtener-datos/${user.id_usuario}`, {
+        headers: {
+          Authorization: `${user.token}`, // Token dado al loguearse
+          "Content-Type": "application/json",
+        },
+      });
+
+      return response.data?.data?.userData;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message || "No se pudo obtener los datos del perfil");
+      }
+      return rejectWithValue("Error desconocido");
+    }
+  }
+);
+
+// Thunk para editar los datos del perfil del usuario (nickname)
+export const editNickName = createAsyncThunk(
+  "user/editNickName",
+  async (user: User, { rejectWithValue }) => {
+
+    try {
+      const response = await axios.put(
+        `${VITE_URL_API}/usuarios/edit-nick/`,
+        {
+          datos: {
+            id_usuario: `${user.id_usuario}`,
+            nick: user.nick,
+          }
+        },
+        {
+          headers: {
+            Authorization: `${user.token}`, // Token dado al loguearse
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data?.status;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data?.message || "No se pudo actualizar el nickname"
+        );
+      }
+      return rejectWithValue("Error desconocido");
+    }
+  }
+);
+
+// Thunk para editar los datos del perfil del usuario (dirección)
+export const editAdressUser = createAsyncThunk(
+  "user/editAdressUser",
+  async (user: User, { rejectWithValue }) => {
+    console.log(user);
+    try {
+      const response = await axios.put(
+        `${VITE_URL_API}/usuarios/edit-direccion/`,
+        {
+          datos: {
+            id_usuario: `${user.id_usuario}`,
+            calle: `${user.calle}`,
+            referencia: `${user.referencia}`,
+            pais: `${user.pais}`,
+            ciudad: `${user.ciudad}`,
+            colonia: `${user.colonia}`,
+            codigoPostal: `${user.codigoPostal}`
+          }
+        },
+        {
+          headers: {
+            Authorization: `${user.token}`, // Token dado al loguearse
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data?.status;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data?.message || "No se pudo actualizar la dirección"
+        );
+      }
+      return rejectWithValue("Error desconocido");
+    }
+  }
+);
+
+// Thunk para editar los datos del perfil del usuario (imagen de perfil)
+export const editImgProfile = createAsyncThunk(
+  "user/editImgProfile",
+  async (user: User, { rejectWithValue }) => {
+
+    console.log('TRAMITE', user);
+    try {
+      const response = await axios.put(
+        `${VITE_URL_API}/usuarios/edit-photo/`,
+        {
+          datos: {
+            id_usuario: `${user.id_usuario}`,
+            prof_pic: user.prof_pic,
+          }
+        },
+        {
+          headers: {
+            Authorization: `${user.token}`, // Token dado al loguearse
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data?.status;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data?.message || "No se pudo actualizar la imagen de perfil"
+        );
+      }
+      return rejectWithValue("Error desconocido");
+    }
+  }
+);
+
+// Thunk para editar los datos del perfil del usuario (imagen de perfil)
+export const deleteImgProfile = createAsyncThunk(
+  "user/deleteImgProfile",
+  async (user: User, { rejectWithValue }) => {
+
+    console.log('TRAMITE', user);
+    try {
+      const response = await axios.put(
+        `${VITE_URL_API}/usuarios/delete-photo`,
+        {
+          datos: {
+            id_usuario: `${user.id_usuario}`,
+          }
+        },
+        {
+          headers: {
+            Authorization: `${user.token}`, // Token dado al loguearse
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data?.status;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data?.message || "No se pudo borrar la imagen anterior"
+        );
       }
       return rejectWithValue("Error desconocido");
     }

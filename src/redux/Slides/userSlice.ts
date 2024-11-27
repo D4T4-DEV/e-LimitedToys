@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../Interfaces/UserInterface";
-import { cargarImagenPerfil, iniciarSesion } from "../Trunks/userTrunk";
+import { cargarImagenPerfil, iniciarSesion, obtenerDatosDelPerfil } from "../Trunks/userTrunk";
 import Cookies from "js-cookie";
 import { decryptSessionIndicator, encryptSessionIndicator } from "../../security/Encr_decp";
 
@@ -17,14 +17,19 @@ const storedUser = Cookies.get("isLoggedIn");
 
 let initialUser: User | null = null;
 
-if (storedUser) {
-    try {
-        const decrypted = await decryptSessionIndicator(storedUser);
-        initialUser = JSON.parse(decrypted);
-    } catch (error) {
-        console.error("Failed to decrypt stored user:", error);
+// Función para inicializar el usuario en caso de las cookies existan
+async function initializeUser() {
+    if (storedUser) {
+        try {
+            const decrypted = await decryptSessionIndicator(storedUser);
+            initialUser = JSON.parse(decrypted);
+        } catch (error) {
+            console.error("Failed to decrypt stored user:", error);
+        }
     }
 }
+// Llamada para ejecutar la función
+await initializeUser();
 
 // Estado inicial
 const initialState: AuthState = {
@@ -54,16 +59,16 @@ export const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // Iniciar sesion
+            // Iniciar sesión
             .addCase(iniciarSesion.pending, (state) => {
                 state.status = "loading";
                 state.error = null;
             })
             .addCase(iniciarSesion.fulfilled, (state, action) => {
-                const expires = new Date(new Date().getTime() + 60 * 60 * 1000); // define el tiempo en una hora
+                const expires = new Date(new Date().getTime() + 60 * 60 * 1000); // Tiempo en una hora
                 state.status = "succeeded";
-                state.currentUser = action.payload; // Almacena los datos del usuario autenticado
-
+                state.currentUser = action.payload; // Datos del usuario autenticado
+    
                 encryptSessionIndicator(JSON.stringify(action.payload)).then((encryptedSession) => {
                     Cookies.set("isLoggedIn", encryptedSession, {
                         expires: expires,
@@ -76,16 +81,50 @@ export const authSlice = createSlice({
                 state.status = "failed";
                 state.error = action.payload as string;
             })
-
+    
             // Obtener y cargar imagen de perfil
             .addCase(cargarImagenPerfil.fulfilled, (state, action) => {
-                state.profileImage = action.payload as string; // Guardar la URL de la imagen
+                state.profileImage = action.payload as string; // Guardar URL de la imagen
             })
             .addCase(cargarImagenPerfil.rejected, (state, action) => {
                 state.error = action.payload as string;
-                state.profileImage = null; // Limpiar imagen en caso de error esto activaria la imagen predeterminada
+                state.profileImage = null; // Limpiar imagen en caso de error
+            })
+    
+            // Obtener datos del perfil
+            .addCase(obtenerDatosDelPerfil.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(obtenerDatosDelPerfil.fulfilled, (state, action) => {
+                state.status = "succeeded";
+            
+                // Extraer los datos relevantes
+                const rootData = action.payload; // Datos a nivel raíz
+                const nestedData = action.payload["0"]; // Datos dentro de la clave "0"
+            
+                // Combinar ambos niveles de datos
+                const combinedData = {
+                    ...nestedData,
+                    ...rootData,
+                    apellidos: nestedData.apellido,
+                    codigoPostal: nestedData.codigo_postal,
+                    prof_pic: nestedData.prof_pic ?? rootData.url_prof_pic, // Priorizar el campo más relevante
+                };
+            
+                delete combinedData["0"]; // elimina la clave innecesaria
+            
+                // Actualizar el usuario actual con los datos combinados
+                state.currentUser = {
+                    ...state.currentUser,
+                    ...combinedData,
+                };
+            })
+            .addCase(obtenerDatosDelPerfil.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload as string;
             });
-    },
+    },    
 });
 
 

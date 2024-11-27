@@ -3,32 +3,87 @@ import './ProductCatalog.css';
 import { AppDispatch, RootState } from '../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProducts } from '../redux/Trunks/productsTrunks';
+import { fetchFilterProducts } from '../redux/Trunks/filterThunks';
 
 const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [category, setCategory] = useState<string>('');
-  const [priceRange, setPriceRange] = useState<number>(10000);
-  const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>(''); // Define la categoria (marca)
+  const [priceMin, setPriceMin] = useState<string | number>(25); // Define el precio minimo
+  const [priceMax, setPriceMax] = useState<string | number>(100); // Define el precio maximo 
+  const [onlyAvailable, /*setOnlyAvailable*/] = useState<boolean>(false); // Define si solo si esta disponible o no
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); // Medio usado para mostrar el detalle del producto
 
   // Obtener el estado de Redux
-  const { entities, ids, status, error, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+  const { entities, ids, status, allProductsError, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+  const { statusFilter, Marcas, precioMinimo, precioMaximo, searchTerm } = useSelector((state: RootState) => state.filter);
+
+  const openModal = (product: any) => {
+    setSelectedProduct(product);
+  };
+
+  const closeModal = () => {
+    setSelectedProduct(null);
+  };
+
+  // Vigilancia del valor minimo (previene valores negativos)
+  const handlePriceMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const numericValue = Number(value);
+    if (value === "" || numericValue < 0) {
+      setPriceMin("");
+    } else {
+      const validValue = Math.min(Math.max(0, numericValue), Number(precioMaximo));
+      setPriceMin(validValue);
+    }
+  };
+
+  // Vigilancia del valor maximo (previene valores negativos)
+  const handlePriceMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const numericValue = Number(value);
+    if (value === "" || numericValue < 0) {
+      setPriceMax("");
+    } else {
+      const validValue = Math.min(Math.max(0, numericValue), Number(precioMaximo));
+      setPriceMax(validValue);
+    }
+  };
+
+  // Funcion para evitar valores no deseados
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Evitar caracteres no deseados (estos siendo los euler y negativo)
+    if (e.key === "e" || e.key === "-") {
+      e.preventDefault();
+    }
+  };
 
   // Aspecto para obtener los productos 
   useEffect(() => {
     if (allProductsStatus === 'idle') {
       dispatch(fetchAllProducts());
     }
-  }, [dispatch, allProductsStatus]);
+    if (statusFilter === 'idle') {
+      dispatch(fetchFilterProducts());
+    }
+  }, [dispatch, allProductsStatus, statusFilter]);
+
+  useEffect(() => {
+    if (statusFilter === 'succeeded') {
+      setPriceMax(Number(precioMaximo) || 100);
+      setPriceMin(Number(precioMinimo) || 0);
+    }
+  }, [dispatch, statusFilter]);
 
   // Filtrar productos usando tanto `entities` como `allProductsEntities`
   const filteredProducts = [
     ...ids.map((id: string) => entities[id]),
     ...allProductsIds.map((id: string) => allProductsEntities[id])
   ].filter((product: any) => {
+    const matchesSearch = product.nombre_producto.toLowerCase().includes(searchTerm) || product.descripcion?.toLowerCase().includes(searchTerm);
     const matchesCategory = category ? product.marca === category : true;
-    const matchesPrice = product.precio_producto <= priceRange;
+    const matchesPrice = product.precio_producto >= priceMin && product.precio_producto <= priceMax;
     const matchesAvailability = onlyAvailable ? product.existencia > 0 : true;
-    return matchesCategory && matchesPrice && matchesAvailability;
+    return matchesSearch && matchesCategory && matchesPrice && matchesAvailability;
   });
 
   return (
@@ -39,32 +94,36 @@ const ProductCatalog: React.FC = () => {
           <label>Categoría:</label>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="">Todas</option>
-            <option value="Bandai">Bandai</option>
-            <option value="Banpresto">Banpresto</option>
-            <option value="Good Smile">Good Smile</option>
-            <option value="Funko">Funko</option>
-            <option value="Youtooz">Youtooz</option>
+            {Marcas.map((marca) => (
+              <option key={marca} value={marca}>{marca}</option>
+            ))}
           </select>
         </div>
         <div className="filter-group">
-          <label>Rango de precio: ${priceRange}</label>
-          <input
-            type="range"
-            min="25"
-            max="10000"
-            value={priceRange}
-            onChange={(e) => setPriceRange(Number(e.target.value))}
-          />
-        </div>
-        <div className="filter-group">
-          <label>
+          <label>Rango de precios:</label>
+          <div className="price-range">
             <input
-              type="checkbox"
-              checked={onlyAvailable}
-              onChange={(e) => setOnlyAvailable(e.target.checked)}
+              type="number"
+              min='0'
+              max={precioMaximo}
+              value={priceMin === "" ? "" : priceMin}
+              onChange={handlePriceMinChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Mín"
+              inputMode="decimal"
             />
-            Solo disponibles
-          </label>
+            <span> - </span>
+            <input
+              type="number"
+              min="0"
+              max={precioMaximo}
+              value={priceMax === "" ? "" : priceMax}
+              onChange={handlePriceMaxChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Máx"
+              inputMode="decimal"
+            />
+          </div>
         </div>
       </aside>
 
@@ -80,13 +139,13 @@ const ProductCatalog: React.FC = () => {
               className="loading"
             />
           </div>
-        ) : error ? (
-          <p>{error}</p>
+        ) : allProductsError ? (
+          <p>{allProductsError}</p>
         ) :
           filteredProducts.length > 0 ? (
             <div className="products-grid">
               {filteredProducts.map(product => (
-                <div key={product.id_producto} className="product-card">
+                <div key={product.id_producto} className="product-card" onClick={() => openModal(product)}>
                   <img src={product.imagenes_producto} alt={product.nombre_producto} className="product-image" />
                   <h4>{product.nombre_producto}</h4>
                   <p>Marca: {product.marca}</p>
@@ -99,6 +158,29 @@ const ProductCatalog: React.FC = () => {
             <div className="no-products">No se encontraron productos.</div>
           )}
       </main>
+      {/* Modal para mostrar los detalles del producto */}
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              &times;
+            </button>
+            <div className="modal-header">
+              <img
+                src={selectedProduct.imagenes_producto}
+                alt={selectedProduct.nombre_producto}
+                className="modal-product-image"
+              />
+            </div>
+            <div className="modal-body">
+              <h1>{selectedProduct.nombre_producto}</h1>
+              <p>{selectedProduct.descripcion}</p>
+              <h3>Descripción de la Franquicia</h3>
+              <p>{selectedProduct.franchiseDescription}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

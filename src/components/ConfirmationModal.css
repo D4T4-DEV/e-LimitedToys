@@ -1,0 +1,47 @@
+.modal-overlay-confirmation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.modal-content-confirmation {
+    background: none;
+    padding: 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #222, #2a2a2a);
+}
+
+.btns-content {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.btn-yes {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 4px;
+}
+
+.btn-no {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 4px;
+}

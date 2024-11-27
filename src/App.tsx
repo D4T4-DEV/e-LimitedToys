@@ -3,8 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AppRoutes } from './Router/routes';
 
-
-
 const App: React.FC = () => {
   return (
     <Router>

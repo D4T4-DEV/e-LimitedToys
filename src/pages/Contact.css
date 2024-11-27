@@ -1,0 +1,26 @@
+.container-contact {
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #222, #2a2a2a);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    position: relative;
+    max-width: 400px;
+    min-height: 350px;
+}
+
+.link_social {
+    color: #fff;
+    text-decoration: none;
+
+}
+
+.link_social:hover {
+    text-decoration: underline;
+}
+
+.socials-container{
+    display: flex;
+    justify-content: space-around;
+}

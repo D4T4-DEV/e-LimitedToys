@@ -2,18 +2,20 @@ import { configureStore } from "@reduxjs/toolkit";
 import bannerReducer from './Slides/bannerSlice';
 import productReducer from './Slides/productSlice';
 import userReducer from './Slides/userSlice';
-import errorReducer from './Slides/erroresSlice';
+import notificationsReducer from './Slides/notificationsSlice';
 import checkoutsReducer from './Slides/checksDataSlice';
 import variosReducer from './Slides/accionesVariasSlice';
+import filterReducer from './Slides/filterSlice';
 
 export const store = configureStore({
     reducer: {
         banners: bannerReducer,
         products: productReducer,
         users: userReducer,
-        errores: errorReducer,
+        notifications: notificationsReducer,
         checks: checkoutsReducer,
         varios: variosReducer,
+        filter: filterReducer,
     }
 });
 

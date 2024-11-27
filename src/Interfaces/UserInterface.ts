@@ -7,11 +7,13 @@ export interface User {
     psw_hash?: string;
     nick?: string;
     url_prof_pic?: string;
+    prof_pic?: string;
     calle?: string;
     colonia?: string;
     ciudad?: string;
     pais?: string;
-    codigoPostal?: number;
+    codigoPostal?: string;
     referencia?: string;
+    referencias?: string;
     token?: string;
 }

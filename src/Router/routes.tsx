@@ -2,8 +2,10 @@ import { RouteObject, useRoutes } from "react-router-dom";
 import Home from '../pages/Home';
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
+import MyProfile from '../pages/MyProfile';
 import ProductCatalog from '../pages/ProductCatalog';
 import useMonitorCookie from "../Cookies/monitorCookies";
+import Contact from "../pages/Contact";
 
 
 const routes: RouteObject[] = [
@@ -22,6 +24,14 @@ const routes: RouteObject[] = [
   {
     path: '/catalog',
     element: <ProductCatalog />,
+  },
+  {
+    path: '/mi-perfil',
+    element: <MyProfile />,
+  },
+  {
+    path: '/contact',
+    element: <Contact/>,
   }
 ];
 

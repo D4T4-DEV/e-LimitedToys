@@ -11,14 +11,14 @@ const LoadingModal: React.FC<LoadingModalProps> = ({ isOpen, mensaje = 'Cargando
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay-loading">
+      <div className="modal-content-loading">
         <img
           src={loadingGif}
           alt="Cargando recursos"
-          className="loading"
+          className="loading-modal"
         />
-        <p>{mensaje}</p>
+        <p style={{marginTop: '2px'}}>{mensaje}</p>
       </div>
     </div>
   );
