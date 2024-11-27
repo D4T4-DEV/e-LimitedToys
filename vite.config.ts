@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react-swc';
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: './build/',
+    outDir: './dist/',
     target: 'esnext', // Soporte de características modernas como top-level await
   },
 });
