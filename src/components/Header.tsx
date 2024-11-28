@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   const handleShoppingCartClick = () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
-      navigate('/mi-carrito');
+      navigate('/carrito');
     } else {
       dispatch(msgQuererVerCarrito());
       navigate('/login');

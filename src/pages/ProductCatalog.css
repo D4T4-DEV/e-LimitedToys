@@ -133,6 +133,30 @@
   color: #fffffc;
 }
 
+.add-btn {
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.add-btn:hover {
+  background-color: #27ae60;
+}
+
+.add-btn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
 .no-products {
   font-size: 1.25rem;
   color: red;
@@ -147,7 +171,6 @@
   width: 150px;
   height: 150px;
 }
-
 
 .modal-overlay {
   position: fixed;

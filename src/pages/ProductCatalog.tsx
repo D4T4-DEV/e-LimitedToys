@@ -151,6 +151,7 @@ const ProductCatalog: React.FC = () => {
                   <p>Marca: {product.marca}</p>
                   <p className='price'>${product.precio_producto}</p>
                   <p>{product.existencia! > 0 ? 'Disponible' : 'Agotado'}</p>
+                  <button className="add-btn">Agregar a la bolsa</button>
                 </div>
               ))}
             </div>
@@ -177,6 +178,7 @@ const ProductCatalog: React.FC = () => {
               <p>{selectedProduct.descripcion}</p>
               <h3>Descripción de la Franquicia</h3>
               <p>{selectedProduct.franchiseDescription}</p>
+              <button className="add-btn">Agregar a la bolsa</button>
             </div>
           </div>
         </div>
