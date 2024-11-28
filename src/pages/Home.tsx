@@ -135,6 +135,7 @@ const Home: React.FC = () => {
                   <div className="featured-caption">
                     <h4>{product.nombre_producto}</h4>
                     <p>${product.precio_producto}</p>
+                    <button className="add-btn">Agregar a la bolsa</button>
                   </div>
                 </div>
               ))}
@@ -148,7 +149,7 @@ const Home: React.FC = () => {
 
       <section id="contact" className="text-section">
         <h2>Contacto</h2>
-        <p>Si tienes alguna pregunta, por favor contáctanos.</p>
+        <p>Si tienes alguna pregunta, por favor contáctanos <a href="/contact" className="contact-link">aquí</a>.</p>
       </section>
       {/* Modal para mostrar los detalles del producto */}
       {selectedProduct && (
@@ -169,6 +170,7 @@ const Home: React.FC = () => {
               <p>{selectedProduct.descripcion}</p>
               <h3>Descripción de la Franquicia</h3>
               <p>{selectedProduct.franchiseDescription}</p>
+              <button className="add-btn">Agregar a la bolsa</button>
             </div>
           </div>
         </div>

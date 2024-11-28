@@ -65,7 +65,6 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
   margin-top: 1.5rem;
 }
 
@@ -82,12 +81,32 @@
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
-  transition: box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .featured-product:hover{
-  box-shadow: 0 4px 8px #484848;
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+.featured-product button.add-btn {
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+
+.featured-caption button.add-btn:hover {
+  background-color: #27ae60;
 }
 
 .featured-image {
@@ -116,7 +135,7 @@
   top: 50%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: #fffffc;
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -148,6 +167,8 @@
   font-family: 'Poppins', sans-serif;
   font-size: 2rem;
   margin-bottom: 1rem;
+  border-bottom: 2px solid #2ecc71;
+  display: inline-block;
 }
 
 .text-section p {
@@ -182,6 +203,16 @@
 
 .text-section button:hover {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.contact-link {
+  color: #2ecc71; 
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+  color: #27ae60;
 }
 
 @media only screen and (max-width: 600px) {

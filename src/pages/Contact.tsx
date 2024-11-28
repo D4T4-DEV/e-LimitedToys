@@ -5,23 +5,24 @@ const Contact: React.FC = () => {
 
     return (
         <>
-            <div className="container-contact">
-                <h1>Sobre nosotros</h1>
-                <p>
-                    Somos una empresa que vende juguetes de colección
-                    estos siendo de las series, animes y medios favoritos.
-                </p>
-                <h2>Contáctanos</h2>
-                <p><strong>Correo:</strong> elimitedtoys@gmail.com</p>
-                <p><strong>Tel:</strong> +52 999 999 9999</p>
-
-                <p><strong>Redes sociales:</strong></p>
-                <div className='socials-container'>
-                    <a href="https://facebook.com" className="link_social">Facebook</a>
-                    <a href="https://twitter.com" className="link_social">Twitter</a>
-                    <a href="https://instagram.com" className="link_social">Instagram</a>
-                </div>
-            </div>
+        <section id="contact" className="contact-info">
+          <h2>Contacto</h2>
+          <p>Si tienes alguna pregunta o duda sobre algún producto, por favor contáctanos.</p>
+          <div className="contact-info">
+            <p><strong>Correo electrónico:</strong> elimitedtoys@gmail.com</p>
+            <p><strong>Teléfono:</strong> +52 999 999 9999</p>
+            <p><strong>Dirección:</strong> Av. Ejemplo #123, Mérida Yucatán, México</p>
+          </div>
+          <form className="contact-form">
+            <label htmlFor="name">Nombre</label>
+            <input type="text" id="name" name="name" placeholder="Tu nombre" required />
+            <label htmlFor="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" placeholder="Tu correo electrónico" required />
+            <label htmlFor="message">Mensaje</label>
+            <textarea id="message" name="message" placeholder="Escribe tu mensaje aquí..." rows={4} required></textarea>
+            <button type="submit">Enviar</button>
+          </form>
+        </section>
         </>
     );
 }
