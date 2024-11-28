@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './MyProfile.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { cargarImagenPerfil, editAdressUser, editNickName, obtenerDatosDelPerfil } from '../redux/Trunks/userTrunk';
+import { editAdressUser, editNickName, obtenerDatosDelPerfil } from '../redux/Trunks/userTrunk';
 import UserAddress from '../components/UserAdress';
 import UserProfile from '../components/UserDataGeneral';
 import ChangeProfileIMG from '../components/ChangeImageProfile';
@@ -60,12 +60,6 @@ const MyProfile: React.FC = () => {
             });
         }
     }, [currentUser]);
-    
-    useEffect(() => {
-        if (currentUser && !profileImage) {
-            dispatch(cargarImagenPerfil(currentUser));
-        }
-    }, [currentUser, profileImage, dispatch]);
 
     useEffect(() => {
         setImageSrc(profileImage || undefined);
@@ -88,7 +82,6 @@ const MyProfile: React.FC = () => {
 
             // Verificar si la acción fue exitosa
             if (editAdressUser.fulfilled.match(resultAction)) {
-                console.log("Dirección actualizada exitosamente:", resultAction.payload);
                 setUserAdress({
                     calle: updatedUserAdress.calle,
                     referencia: updatedUserAdress.referencia,
@@ -117,7 +110,7 @@ const MyProfile: React.FC = () => {
 
             // Verificar si la acción fue exitosa
             if (editNickName.fulfilled.match(resultAction)) {
-                console.log("Nickname actualizado exitosamente:", updateNick);
+
                 setUserDataGeneral((prev) => ({
                     ...prev,
                     nickname: updateNick, // Actualizar el estado local
@@ -181,7 +174,7 @@ const MyProfile: React.FC = () => {
             <div className="prof-container">
                 {activeTab === 'EditarFoto' &&
                     <div>
-                        <ChangeProfileIMG prof_pic={currentUser?.prof_pic} token={currentUser?.token} id={currentUser?.id_usuario}/>
+                        <ChangeProfileIMG prof_pic={currentUser?.prof_pic} token={currentUser?.token} id={currentUser?.id_usuario} />
                     </div>
                 }
                 {activeTab === 'Perfil' &&
