@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmationModal from "./ConfirmationModal";
+import './UserDataGeneral.css'
 
 // Esquema de validación para el nickname
 const nicknameSchema = z.object({
