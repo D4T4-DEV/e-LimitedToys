@@ -4,6 +4,10 @@ import { AppDispatch, RootState } from '../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFeaturedProducts } from '../redux/Trunks/productsTrunks';
 import { fetchBanners } from '../redux/Trunks/bannerTrunks';
+import { addProductToShoppingCart } from '../redux/Trunks/shoppingCartThunk';
+import { Product } from '../Interfaces/ProductInterface';
+import { useNavigate } from 'react-router-dom';
+import { msgQuererComprar } from '../redux/Slides/notificationsSlice';
 
 const Home: React.FC = () => {
 
@@ -11,6 +15,9 @@ const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { images, status: bannersStatus, error: bannersError } = useSelector((state: RootState) => state.banners);
   const { featuredEntities, featuredIds, status: productsStatus, error: productsError } = useSelector((state: RootState) => state.products);
+  const { currentUser } = useSelector((state: RootState) => state.users);
+
+  const navigate = useNavigate();
 
   //Aspecto para cambiar lo mostrado (img o productos)
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -84,6 +91,39 @@ const Home: React.FC = () => {
     setFeaturedIndex((prevIndex) => (prevIndex + 1) % productosDestacados.length);
   };
 
+  // Evento para comprar
+  const handleClickToShopping = async (product: Product) => {
+
+    if (!currentUser || Object.keys(currentUser).length === 0) {
+      // Dispatch de un mensaje informativo
+      dispatch(msgQuererComprar());
+
+      // Redirige al usuario a la página de inicio de sesión
+      navigate('/login');
+      return; // Sale de esta funcion
+    }
+
+    try {
+      // Datos que a enviar
+      const data = {
+        user_id: currentUser?.id_usuario,
+        product_id: product.id_producto,
+        user_token: currentUser?.token,
+        existencias: '1',
+      };
+
+      // Ejecutar el despachador para agregar el producto al carrito
+      const response = await dispatch(addProductToShoppingCart(data));
+
+      // Manejo de los resultados del despachador
+      if (response.payload === 'Cantidad excede las existencias disponibles en el inventario') {
+        console.warn('No se agregado porque ya no tenemos tantos en stock');
+      }
+    } catch (error) {
+      console.error("Error al agregar al carrito:", error);
+    }
+  };
+
   // Funcion para mostrar solo 3 productos destacados
   const visibleProducts = productosDestacados.length <= 3
     ? productosDestacados // Mostrar todos los productos si son menores de 3
@@ -135,7 +175,7 @@ const Home: React.FC = () => {
                   <div className="featured-caption">
                     <h4>{product.nombre_producto}</h4>
                     <p>${product.precio_producto}</p>
-                    <button className="add-btn">Agregar a la bolsa</button>
+                    <button className="add-btn" onClick={() => handleClickToShopping(product)}>Agregar a la bolsa</button>
                   </div>
                 </div>
               ))}
@@ -170,7 +210,7 @@ const Home: React.FC = () => {
               <p>{selectedProduct.descripcion}</p>
               <h3>Descripción de la Franquicia</h3>
               <p>{selectedProduct.franchiseDescription}</p>
-              <button className="add-btn">Agregar a la bolsa</button>
+              <button className="add-btn" onClick={() => handleClickToShopping(selectedProduct)}>Agregar a la bolsa</button>
             </div>
           </div>
         </div>
