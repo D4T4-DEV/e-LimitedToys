@@ -2,12 +2,13 @@
   display: flex;
   font-family: 'Poppins', sans-serif;
   color: #333;
+  background-color: #F7F7F8;
 }
 
 .filters-panel {
   width: 250px;
   padding: 1.5rem;
-  color: white;
+  color: #404040;
   position: sticky;
   top: 0;
   height: 100%;
@@ -82,7 +83,7 @@
 }
 
 .product-card {
-  background-color: #242424;
+  background-color: #FFFFFF;
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
@@ -112,25 +113,25 @@
   margin-bottom: 1rem;
   border-radius: 8px;
   object-fit: contain;
-  background-color: #333;
+  background-color: rgb(233, 233, 233);
 }
 
 .product-card h4 {
   font-size: 1.25rem;
   font-style: bold;
-  color: #fffffc;
+  color: #404040;
   margin-bottom: 0.5rem;
 }
 
 .product-card p {
   font-size: 1rem;
-  color: #fff;
+  color: #404040;
   margin: 0.5rem 0;
 }
 
 .product-card p.price {
   font-weight: bold;
-  color: #fffffc;
+  color: #404040;
 }
 
 .add-btn {
@@ -186,7 +187,7 @@
 }
 
 .modal-content {
-  background: #242424;
+  background: #FFFFFF;
   padding: 2rem;
   border-radius: 8px;
   max-width: 500px;
@@ -202,32 +203,40 @@
   margin-bottom: 1rem;
   border-radius: 8px;
   object-fit: contain;
-  background-color: #333;
+  background-color: rgb(233, 233, 233);
 }
 
-.modal-content h1,
-.modal-content h3 {
-  color: #ffffff;
+.modal-content h1 {
+  font-size: 40px;
+  color: #404040;
   margin-bottom: 1rem;
 }
 
+.modal-content h3 {
+  font-size: 30px;
+  color: #404040;
+  text-align: end;
+}
+
 .modal-content p {
-  color: #ffffff;
+  font-size: 18px;
+  color: #404040;
   margin-bottom: 1rem;
 }
 
 .modal-close {
+  color: #000000;
   position: absolute;
   top: 10px;
   right: 10px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   cursor: pointer;
 }
 
 .modal-close:hover {
   color: #ff0000;
-  transform: scale(1.2);
+  transform: scale(1);
   transition: color 0.2s ease, transform 0.2s ease;
 }
