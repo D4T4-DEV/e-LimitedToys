@@ -97,7 +97,9 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <header className="header">
       <div className="header_logo">
-        <img src={logoIcon} alt="Logo" className="logo-image" />
+        <Link to="/">
+          <img src={logoIcon} alt="Logo" className="logo-image" />
+        </Link>
       </div>
       <nav className="header_nav">
         <ul className="header_nav-list">
