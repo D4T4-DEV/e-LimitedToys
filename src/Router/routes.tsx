@@ -41,8 +41,9 @@ const routes: RouteObject[] = [
 ];
 
 export const AppRoutes: React.FC = () => {
+  // Cuando se inice, estas funciones se aplicaran
   useMonitorCookie('isLoggedIn');
   useMonitorCookie('sessionKey');
-  const routing = useRoutes(routes); // Ahora se ejecuta dentro del contexto del Router
+  const routing = useRoutes(routes); 
   return <>{routing}</>;
 };
