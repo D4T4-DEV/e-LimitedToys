@@ -3,8 +3,8 @@
   margin: 2rem auto;
   padding: 1.5rem;
   border-radius: 8px;
-  background: linear-gradient(135deg, #222, #2a2a2a);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); 
+  background: linear-gradient(135deg, #f9fafb, #e7e7e7);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.30);
   overflow: hidden;
   position: relative;
   min-height: 535px;
@@ -14,7 +14,7 @@
   font-size: 2rem;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: #fff;
+  color: #404040;
 }
 
 .auth-container.login {
@@ -24,7 +24,7 @@
 .auth-container h3 {
   font-size: 1rem;
   text-align: center;
-  color: #fff;
+  color: #404040;
 }
 
 .link-auth {
@@ -84,14 +84,15 @@
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #333;
-  color: #fff;
+  background-color: #fff;
+  color: #333;
   width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .auth-container input:focus {
   border-color: #4a90e2;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.8);
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
   outline: none;
 }
 
@@ -121,15 +122,13 @@
 
 .auth-container button.button-back {
   background: none;
-  margin-right: 10.38rem;
+  color: #4a90e2;
+  font-weight: bold;
+  margin-right: 9.8rem;
 }
 
 .auth-container button.button-signup:hover {
   background-color: #357ab8;
-}
-
-.auth-container button.button-back:hover {
-  background-color: #d28328;
 }
 
 .step-indicator {
