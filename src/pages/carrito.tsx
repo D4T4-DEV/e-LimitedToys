@@ -19,7 +19,13 @@ const Carrito: React.FC = () => {
     }
 
     if (cart.status === 'failed') {
-        return <div className="container-cart"><h2>Error: {cart.error}</h2></div>;
+        return <div className="container-cart">
+            <h2>
+                    {cart.error === 'No se encontro un carrito con el Id del usuario proporcionado'
+                    ? 'Tu carrito está vacío'
+                    : `Error: ${cart.error}`}
+            </h2>
+        </div>;
     }
 
     const totalItems = cart.ids.reduce((total, id) => total + cart.entities[id].cantidad_seleccionada, 0);
