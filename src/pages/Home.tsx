@@ -208,7 +208,7 @@ const Home: React.FC = () => {
             <div className="modal-body">
               <h1>{selectedProduct.nombre_producto}</h1>
               <p>{selectedProduct.descripcion}</p>
-              <h3>{selectedProduct.precio_producto}</h3>
+              <h3>${selectedProduct.precio_producto}</h3>
               <button className="add-btn" onClick={() => handleClickToShopping(selectedProduct)}>Agregar a la bolsa</button>
             </div>
           </div>
