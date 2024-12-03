@@ -219,6 +219,32 @@
   color: #27ae60;
 }
 
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.brand-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.brand-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.brand-card p {
+  font-size: 14.5px;
+  color: #555;
+}
+
+
 @media only screen and (max-width: 600px) {
   .carousel-btn{
     padding: 0.4rem .5rem;

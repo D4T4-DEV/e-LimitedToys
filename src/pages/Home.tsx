@@ -187,6 +187,33 @@ const Home: React.FC = () => {
         )}
       </div>
 
+      <div className="text-section">
+        <h2>Conoce a las Empresas</h2>
+        <p>Descubre algunas de todas las marcas que puedes encontrar aquí con las colección más sorprendentes y de alta calidad.</p>
+        <div className="brands-grid">
+          {[
+            {
+              name: "Funko",
+              description: "Funko lidera en figuras Pop! de vinilo, capturando personajes icónicos de películas, videojuegos y series con un diseño único que encanta tanto a aficionados casuales como a coleccionistas exigentes.",
+            },
+            {
+              name: "Bandai",
+              description: "Bandai destaca por figuras y modelos icónicos como Gundam y Dragon Ball, ofreciendo calidad excepcional en productos que conectan generaciones de fans y celebran la cultura pop japonesa.",
+            },
+            {
+              name: "Youtooz",
+              description: "Youtooz crea figuras exclusivas en colaboración con creadores digitales, reflejando estilos únicos y lanzando ediciones limitadas que son altamente valoradas por coleccionistas de la cultura digital moderna.",
+            }
+            
+          ].map((brand, index) => (
+            <div key={index} className="brand-card">
+              <h2>{brand.name}</h2>
+              <p>{brand.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <section id="contact" className="text-section">
         <h2>Contacto</h2>
         <p>Si tienes alguna pregunta, por favor contáctanos <a href="/contact" className="contact-link">aquí</a>.</p>
