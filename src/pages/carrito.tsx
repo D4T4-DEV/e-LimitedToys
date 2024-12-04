@@ -28,7 +28,7 @@ const Carrito: React.FC = () => {
         );
     }
 
-    const totalItems = cart.ids.reduce((total, id) => total + cart.entities[id].cantidad_seleccionada, 0);
+    // const totalItems = cart.ids.reduce((total, id) => total + cart.entities[id].cantidad_seleccionada, 0);
     const totalPrice = cart.ids.reduce((total, id) => total + parseFloat(cart.entities[id].total_a_pagar), 0);
     const totalShipping = cart.ids.reduce((total, id) => total + parseFloat(cart.entities[id].precio_envio), 0);
 
