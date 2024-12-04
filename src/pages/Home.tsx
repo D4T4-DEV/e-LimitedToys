@@ -45,6 +45,15 @@ const Home: React.FC = () => {
     if (bannersStatus === 'idle') {
       dispatch(fetchBanners());
     }
+    if (bannersStatus === 'failed') {
+      // Temporizador a 10s
+      const timer = setTimeout(() => {
+        dispatch(fetchBanners()); // Reintentamos
+      }, 10000);
+
+      // Limpia el temporizador
+      return () => clearTimeout(timer);
+    }
   }, [dispatch, bannersStatus]);
 
   // Aspecto para obtener los productos destacados 
@@ -52,6 +61,17 @@ const Home: React.FC = () => {
     if (productsStatus === 'idle') {
       dispatch(fetchFeaturedProducts());
     }
+
+    if (productsStatus === 'failed') {
+      // Temporizador a 10s
+      const timer = setTimeout(() => {
+        dispatch(fetchFeaturedProducts()); // Reintentamos
+      }, 10000);
+
+      // Limpia el temporizador
+      return () => clearTimeout(timer);
+    }
+
   }, [dispatch, productsStatus]);
 
   // Cambiar imágenes del carrusel automáticamente
@@ -172,8 +192,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
-      {bannersStatus === 'loading' && <p>Cargando banners...</p>}
-      {bannersStatus === 'failed' && <p>Error banners: {bannersError}</p>}
+      {bannersStatus === 'loading' && <p style={{color: 'black', textAlign:'center'}}>Cargando banners...</p>}
+      {bannersStatus === 'failed' && <p style={{color: 'black', textAlign:'center'}}>Ha ocurrido un error, lo volveremos a intentar 🙌</p>}
       {bannersStatus === 'succeeded' && (
         <>
           <div className="carousel">
@@ -190,8 +210,8 @@ const Home: React.FC = () => {
 
       <div className="text-section">
         <h2>Productos Destacados</h2>
-        {productsStatus === 'loading' && <p>Cargando productos...</p>}
-        {productsStatus === 'failed' && <p>Error productos: {productsError}</p>}
+        {productsStatus === 'loading' && <p>Cargando productos destacados...</p>}
+        {productsStatus === 'failed' && <p>Ha ocurrido un error, lo volveremos a intentar 🙌</p>}
         {productsStatus === 'succeeded' && (
           <div className="featured-carousel">
             <button className="carouself-btn prev" onClick={handlePrevProduct}>

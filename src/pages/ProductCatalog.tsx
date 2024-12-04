@@ -73,6 +73,27 @@ const ProductCatalog: React.FC = () => {
     if (statusFilter === 'idle') {
       dispatch(fetchFilterProducts());
     }
+
+    if (allProductsStatus === 'failed') {
+      // Temporizador a 10s
+      const timer = setTimeout(() => {
+        dispatch(fetchAllProducts()); // Reintentamos
+      }, 10000);
+
+      // Limpia el temporizador
+      return () => clearTimeout(timer);
+    }
+
+    if (statusFilter === 'failed') {
+      // Temporizador a 10s
+      const timer = setTimeout(() => {
+        dispatch(fetchFilterProducts()); // Reintentamos
+      }, 10000);
+
+      // Limpia el temporizador
+      return () => clearTimeout(timer);
+    }
+
   }, [dispatch, allProductsStatus, statusFilter]);
 
   useEffect(() => {
@@ -216,7 +237,7 @@ const ProductCatalog: React.FC = () => {
             />
           </div>
         ) : allProductsError ? (
-          <p>{allProductsError}</p>
+          <p style={{textAlign: 'center'}}>Ha ocurrido un error, lo volveremos a intentar 🙌</p>
         ) :
           filteredProducts.length > 0 ? (
             <div className="products-grid">
