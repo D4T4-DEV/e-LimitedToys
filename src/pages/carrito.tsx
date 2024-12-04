@@ -15,17 +15,16 @@ const Carrito: React.FC = () => {
     }, [dispatch]);
 
     if (cart.status === 'loading') {
-        return <div className="container-cart"><h2>Cargando carrito...</h2></div>;
+        return <div className="cart-status"><h2 className="cart-status-message">Cargando carrito...</h2></div>;
     }
 
     if (cart.status === 'failed') {
-        return <div className="container-cart">
-            <h2>
-                    {cart.error === 'No se encontro un carrito con el Id del usuario proporcionado'
-                    ? 'Tu carrito está vacío'
-                    : `Error: ${cart.error}`}
-            </h2>
-        </div>;
+        return (
+            <div className="cart-empty">
+                <h2 className="cart-empty-title">Tu carrito está vacío</h2>
+                <p className="cart-empty-message">Explora nuestra tienda y encuentra algo que te encante.</p>
+            </div>
+        );
     }
 
     const totalItems = cart.ids.reduce((total, id) => total + cart.entities[id].cantidad_seleccionada, 0);
@@ -68,30 +67,34 @@ const Carrito: React.FC = () => {
     };
 
     return (
-        <div className="container-cart">
-            <h1>Carrito de Compras</h1>
+        <div className="shopping-cart">
+            <h1 className="cart-title">Carrito de Compras</h1>
             <div className="cart-items">
                 {cart.ids.map((id) => {
                     const item = cart.entities[id];
                     return (
                         <div className="cart-item" key={id}>
-                            <img src={item.imagen_producto} alt={item.nombre_producto} className="item-image" />
-                            <div className="item-details">
-                                <h2>{item.nombre_producto}</h2>
-                                <p><strong>Precio:</strong> ${item.precio_producto}</p>
-                                <p><strong>Cantidad:</strong> {item.cantidad_seleccionada}</p>
-                                <p><strong>Coste de envio:</strong> {item.precio_envio}</p>
-                                <button className="remove-btn" onClick={() => handleClickToEliminate(`${id}`)}>Eliminar</button>
+                            <img src={item.imagen_producto} alt={item.nombre_producto} className="cart-item-image" />
+                            <div className="cart-item-details">
+                                <h2 className="cart-item-name">{item.nombre_producto}</h2>
+                                <p className="cart-item-price"><strong>Precio:</strong> ${item.precio_producto}</p>
+                                <p className="cart-item-quantity"><strong>Cantidad:</strong> {item.cantidad_seleccionada}</p>
+                                <p className="cart-item-shipping"><strong>Coste de envío:</strong> ${item.precio_envio}</p>
+                                <button className="cart-button-remove" onClick={() => handleClickToEliminate(`${id}`)}>
+                                    Eliminar
+                                </button>
                             </div>
                         </div>
                     );
                 })}
             </div>
             <div className="cart-summary">
-                <h2>Resumen</h2>
-                <p className="preciot"><strong>Total: ${totalPrice.toFixed(2)}</strong></p>
-                <p className="preciote"><strong>Total de envío: ${totalShipping.toFixed(2)}</strong></p>
-                <button className="checkout-btn" onClick={handleClickToBuy} >Finalizar Compra</button>
+                <h2 className="cart-summary-title">Resumen</h2>
+                <p className="cart-summary-total"><strong>Total: ${totalPrice.toFixed(2)}</strong></p>
+                <p className="cart-summary-shipping"><strong>Total de envío: ${totalShipping.toFixed(2)}</strong></p>
+                <button className="cart-button-checkout" onClick={handleClickToBuy}>
+                    Finalizar Compra
+                </button>
             </div>
         </div>
     );
