@@ -163,7 +163,8 @@ const Home: React.FC = () => {
             </button>
             <div className="featured-slide">
               {visibleProducts.map((product) => (
-                <div key={product.id_producto} className="featured-product" onClick={() => openModal(product)}>
+                // product-card not-available
+                <div key={product.id_producto} className={product.existencia === 0 ? 'featured-product not-available' : "featured-product"} onClick={() => openModal(product)}>
                   {/* Solo muestra la primera imagen del producto */}
                   {product.imagenes_producto && product.imagenes_producto.length > 0 && (
                     <img
@@ -176,6 +177,7 @@ const Home: React.FC = () => {
                     <h4>{product.nombre_producto}</h4>
                     <p className='price'>${product.precio_producto}</p>
                     {/* <button className="add-btn" onClick={() => handleClickToShopping(product)}>Agregar a la bolsa</button> */}
+                    {product.existencia === 0 ? <p className='not-stock'>Agotado</p> : <p className='stock'>Disponible</p>}
                   </div>
                 </div>
               ))}
@@ -204,7 +206,7 @@ const Home: React.FC = () => {
               name: "Youtooz",
               description: "Youtooz crea figuras exclusivas en colaboración con creadores digitales, reflejando estilos únicos y lanzando ediciones limitadas que son altamente valoradas por coleccionistas de la cultura digital moderna.",
             }
-            
+
           ].map((brand, index) => (
             <div key={index} className="brand-card">
               <h2>{brand.name}</h2>
