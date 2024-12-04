@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 import './ProfileIcon.css';
@@ -20,6 +20,7 @@ const Header: React.FC<HeaderProps> = () => {
   const [inputValue, setInputValue] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { currentUser, profileImage } = useSelector(
     (state: RootState) => state.users
@@ -75,6 +76,13 @@ const Header: React.FC<HeaderProps> = () => {
     setDropdownOpen(false);
   };
 
+  // Función para cerrar el dropdown del usuario al dar clic fuera
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setDropdownOpen(false); 
+    }
+  };
+
   // Petición para obtener la imagen de perfil al cargar Redux
   useEffect(() => {
     if (currentUser) {
@@ -99,6 +107,14 @@ const Header: React.FC<HeaderProps> = () => {
       dispatch(setSearchTerm(''))
     }
   }, [location]);
+
+  // Use effect para cerrar el dropdown al dar clic afuera
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <header className="header">
@@ -145,7 +161,7 @@ const Header: React.FC<HeaderProps> = () => {
         </span>
         {/*esto viene del componente ProfileIcon*/}
         {currentUser ? (
-          <div className="dropdown">
+          <div className="dropdown" ref={dropdownRef}>
             <ProfileIcon imageSrc={imageSrc} onClick={toggleDropdown} />
             {dropdownOpen && (
               <div className="dropdown-menu">
