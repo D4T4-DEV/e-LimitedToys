@@ -268,6 +268,19 @@
   color: #555;
 }
 
+@media only screen and (max-width: 1040px) {
+  .featured-caption h4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* limita que el h2 solo pueda tener 2 lineas */
+    overflow: hidden; 
+    text-overflow: ellipsis; /* cuando se pasa de 2 lineas añade puntos suspensivos */
+  }
+
+  .featured-caption p {
+    margin-top: -2px;
+  }
+}
 
 @media only screen and (max-width: 600px) {
   .carousel-btn{
