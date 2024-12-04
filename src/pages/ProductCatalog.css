@@ -6,7 +6,6 @@
 }
 
 .filters-panel {
-  width: 25%;
   padding: 1.5rem;
   color: #404040;
   position: sticky;
@@ -83,6 +82,7 @@
 }
 
 .product-card {
+  cursor: pointer;
   background-color: #FFFFFF;
   padding: 1rem;
   border-radius: 8px;

@@ -71,6 +71,7 @@
 }
 
 .featured-product {
+  cursor: pointer;
   flex: 1 0 30%;
   margin: 0 10px;
   text-align: center;

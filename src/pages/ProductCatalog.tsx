@@ -191,7 +191,6 @@ const ProductCatalog: React.FC = () => {
                   <p>Marca: {product.marca}</p>
                   <p className='price'>${product.precio_producto}</p>
                   <p>{product.existencia! > 0 ? 'Disponible' : 'Agotado'}</p>
-                  <button className="add-btn" onClick={() => handleClickToShopping(product)}>Agregar a la bolsa</button>
                 </div>
               ))}
             </div>
