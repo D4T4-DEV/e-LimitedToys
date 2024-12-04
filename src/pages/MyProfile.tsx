@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './MyProfile.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { cargarImagenPerfil, editAdressUser, editNickName, obtenerDatosDelPerfil } from '../redux/Trunks/userTrunk';
+import { editAdressUser, editNickName, obtenerDatosDelPerfil } from '../redux/Trunks/userTrunk';
 import UserAddress from '../components/UserAdress';
 import UserProfile from '../components/UserDataGeneral';
 import ChangeProfileIMG from '../components/ChangeImageProfile';
@@ -60,12 +60,6 @@ const MyProfile: React.FC = () => {
             });
         }
     }, [currentUser]);
-    
-    useEffect(() => {
-        if (currentUser && !profileImage) {
-            dispatch(cargarImagenPerfil(currentUser));
-        }
-    }, [currentUser, profileImage, dispatch]);
 
     useEffect(() => {
         setImageSrc(profileImage || undefined);
@@ -88,7 +82,6 @@ const MyProfile: React.FC = () => {
 
             // Verificar si la acción fue exitosa
             if (editAdressUser.fulfilled.match(resultAction)) {
-                console.log("Dirección actualizada exitosamente:", resultAction.payload);
                 setUserAdress({
                     calle: updatedUserAdress.calle,
                     referencia: updatedUserAdress.referencia,
@@ -117,7 +110,7 @@ const MyProfile: React.FC = () => {
 
             // Verificar si la acción fue exitosa
             if (editNickName.fulfilled.match(resultAction)) {
-                console.log("Nickname actualizado exitosamente:", updateNick);
+
                 setUserDataGeneral((prev) => ({
                     ...prev,
                     nickname: updateNick, // Actualizar el estado local
@@ -131,7 +124,8 @@ const MyProfile: React.FC = () => {
     };
 
     return (
-        <div className='myprofile-container'>
+        <div className="myprofile-container">
+            {/* Barra lateral */}
             <div className="prof-side-container">
                 {/* Imagen de perfil */}
                 <div className="imgProf">
@@ -139,23 +133,16 @@ const MyProfile: React.FC = () => {
                         <img
                             src={imageSrc}
                             alt="Perfil"
-                            className="profile-image"
-                            style={{
-                                width: '125px',
-                                height: '125px',
-                                borderRadius: '50%',
-                                objectFit: 'cover',
-                                marginBottom: '10px'
-                            }}
+                            className="profile-image-container"
                         />
                     ) : (
-                        <span style={{ marginBottom: '10px' }}>
+                        <div className="default-avatar">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="125"
                                 height="125"
-                                fill="currentColor"
-                                className="user"
+                                fill="#6b7280"
+                                className="user-icon"
                                 viewBox="0 0 16 16"
                             >
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -164,36 +151,45 @@ const MyProfile: React.FC = () => {
                                     d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
                                 />
                             </svg>
-                        </span>
+                        </div>
                     )}
                 </div>
-                {/* Botones de vistas */}
-                <div className={`info-tab ${activeTab === 'EditarFoto' ? 'active' : ''}`} onClick={() => setActiveTab('EditarFoto')}>
-                    Editar foto
-                </div>
-                <div className={`info-tab ${activeTab === 'Perfil' ? 'active' : ''}`} onClick={() => setActiveTab('Perfil')}>
-                    Perfil
-                </div>
-                <div className={`info-tab ${activeTab === 'Direccion' ? 'active' : ''}`} onClick={() => setActiveTab('Direccion')}>
-                    Dirección
+                
+                {/* Tabs */}
+                <div className="tabs">
+                    {['EditarFoto', 'Perfil', 'Direccion'].map((tab) => (
+                        <button
+                            key={tab}
+                            className={`info-tab ${activeTab === tab ? 'active' : ''}`}
+                            onClick={() => setActiveTab(tab)}
+                        >
+                            {tab === 'EditarFoto' ? 'Editar Foto' : tab}
+                        </button>
+                    ))}
                 </div>
             </div>
+                
+            {/* Contenido principal */}
             <div className="prof-container">
-                {activeTab === 'EditarFoto' &&
-                    <div>
-                        <ChangeProfileIMG prof_pic={currentUser?.prof_pic} token={currentUser?.token} id={currentUser?.id_usuario}/>
-                    </div>
-                }
-                {activeTab === 'Perfil' &&
-                    <div>
-                        <UserProfile currentUser={userDataGeneral} onSaveNickname={handleSaveDataGeneral} />
-                    </div>
-                }
-                {activeTab === 'Direccion' &&
-                    <div>
-                        <UserAddress currentUser={userAdress} onSave={handleSaveAdress} />
-                    </div>
-                }
+                {activeTab === 'EditarFoto' && (
+                    <ChangeProfileIMG 
+                        prof_pic={currentUser?.prof_pic} 
+                        token={currentUser?.token} 
+                        id={currentUser?.id_usuario} 
+                    />
+                )}
+                {activeTab === 'Perfil' && (
+                    <UserProfile 
+                        currentUser={userDataGeneral} 
+                        onSaveNickname={handleSaveDataGeneral} 
+                    />
+                )}
+                {activeTab === 'Direccion' && (
+                    <UserAddress 
+                        currentUser={userAdress} 
+                        onSave={handleSaveAdress} 
+                    />
+                )}
             </div>
         </div>
     );

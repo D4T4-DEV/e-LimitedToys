@@ -1,0 +1,103 @@
+.profile-details {
+    padding: 20px;
+    background: linear-gradient(135deg, #f9f9f9, #e6e6e6);
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-field {
+    margin-bottom: 15px;
+}
+
+.profile-field-label {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-field-value {
+    font-size: 20px;
+    color: #555;
+}
+
+.profile-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.profile-button-edit {
+    background-color: #87CEEB;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.profile-button-edit:hover {
+    background-color: #71B6DB;
+}
+
+.profile-button-save {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #2ecc71;
+    color: #fff;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.profile-button-save:hover {
+    background-color: #27ae60;
+}
+
+.profile-button-cancel {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #ff6b6b;
+    color: #fff;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.profile-button-cancel:hover {
+    background-color: #e63939;
+}
+
+.profile-input {
+    padding: 8px;
+    font-size: 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 200px;
+    background-color: transparent;
+    color: #555;
+    border-color: #71B6DB;
+    transition: border-color 0.3s ease;
+}
+
+.profile-input:focus {
+    border-color: #87CEEB;
+    outline: none;
+}
+
+.profile-error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
