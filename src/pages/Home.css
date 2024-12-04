@@ -81,11 +81,22 @@
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  height: 415px;
 }
 
 .featured-product:hover{
   transform: scale(1.03);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+.featured-product.not-available {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.featured-product.not-available .product-image {
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
 }
 
 .featured-product button.add-btn {
@@ -178,6 +189,18 @@
 .text-section p.price {
   font-size: 1.25rem;
   color: #404040;
+}
+
+.text-section p.not-stock {
+  font-size: 0.95rem;
+  color: #ff0000;
+  margin: 0;
+}
+
+.text-section p.stock {
+  font-size: 0.95rem;
+  color: #27ae60;
+  margin: 0;
 }
 
 .text-section form {
