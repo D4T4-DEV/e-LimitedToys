@@ -14,17 +14,17 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: transparent;
+    border-radius: 10px;
 }
 
 .prof-container {
     flex: 1;
     margin: 20px;
     padding: 20px;
-    background: linear-gradient(135deg, #f0f0f0, #e4e4e4);
+    background: linear-gradient(135deg, #f9f9f9, #e6e6e6);
     border-radius: 20px;
-    color: #333;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #555;
 }
 
 .imgProf {
@@ -40,8 +40,8 @@
     height: 125px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #2ecc71;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    border: 3px solid #87CEEB;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .default-avatar {
@@ -51,7 +51,7 @@
     width: 125px;
     height: 125px;
     border-radius: 50%;
-    background-color: #ccc;
+    background-color: #e6e6e6;
 }
 
 .tabs {
@@ -67,37 +67,38 @@
     text-align: center;
     cursor: pointer;
     font-weight: bold;
-    color: #fff;
-    background-color: #333;
+    color: #555;
+    background-color: #e6e6e6;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
 
+
 .info-tab:hover {
-    background-color: #444;
-    color: #e4e4e4;
+    background-color: #e6e6e6;
+    color: #555;
     transform: scale(1.05);
 }
 
 .info-tab.active {
-    background-color: #2ecc71;
+    background-color: #87CEEB;
     color: #fff;
 }
 
 .edit-photo-btn {
     display: inline-block;
-    color: #2ecc71;
+    color: #87CEEB;
     cursor: pointer;
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
 .edit-photo-btn:hover {
-    color: #2ecc71cc;
+    color: #71B6DB;
 }
 
-/* Ajustes responsivos */
+/* Ajustes responsivos (no está perfecto, hay que checarlo) */
 @media (max-width: 768px) {
     .myprofile-container {
         flex-direction: column;
