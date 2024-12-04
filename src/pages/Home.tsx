@@ -175,7 +175,7 @@ const Home: React.FC = () => {
                   <div className="featured-caption">
                     <h4>{product.nombre_producto}</h4>
                     <p className='price'>${product.precio_producto}</p>
-                    <button className="add-btn" onClick={() => handleClickToShopping(product)}>Agregar a la bolsa</button>
+                    {/* <button className="add-btn" onClick={() => handleClickToShopping(product)}>Agregar a la bolsa</button> */}
                   </div>
                 </div>
               ))}

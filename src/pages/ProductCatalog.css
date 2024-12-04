@@ -6,12 +6,13 @@
 }
 
 .filters-panel {
-  width: 250px;
+  width: 25%;
   padding: 1.5rem;
   color: #404040;
   position: sticky;
   top: 0;
   height: 100%;
+  transition: all 0.2s ease;
 }
 
 .filters-panel h3 {
@@ -242,4 +243,38 @@
   color: #ff0000;
   transform: scale(1);
   transition: color 0.2s ease, transform 0.2s ease;
+}
+
+@media only screen and (max-width: 600px) {
+  .catalog-container {
+    display: block;
+  }
+
+  .filters-panel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: static;
+    height: auto;
+    padding: 1rem;
+    gap: 5%;
+  }
+
+  .filters-panel h3 {
+    font-size: 1.5rem;
+    margin-top: -10px;
+  }
+
+  .filter-group {
+    margin-top: 1.5rem;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80%, 1fr));
+    gap: 1rem;
+    margin-top: -30px;
+    width: 100%;
+  }
+  
 }
