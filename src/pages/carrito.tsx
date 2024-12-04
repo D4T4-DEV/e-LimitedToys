@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import './carrito.css';
 import { AppDispatch, RootState } from '../redux/store';
 import { buyProductsInShoppingCart, eliminatedProductToShoppingCart, fetchShoppingCart } from '../redux/Trunks/shoppingCartThunk';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const Carrito: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -42,10 +43,39 @@ const Carrito: React.FC = () => {
             const response = await dispatch(eliminatedProductToShoppingCart(data));
 
             if (response.meta.requestStatus === 'fulfilled') {
-                dispatch(fetchShoppingCart({ user_token: currentUser?.token, user_id: currentUser?.id_usuario }));
+                toast('Eliminaste el producto', {
+                    position: "bottom-right",
+                    autoClose: 2500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+                // Retrasar la actualización del carrito
+                setTimeout(() => {
+                    dispatch(fetchShoppingCart({
+                        user_token: currentUser?.token,
+                        user_id: currentUser?.id_usuario
+                    }));
+                }, 1000);
+                console.log('Ha eliminado un producto');
             }
         } catch (error) {
             console.error('Error al eliminar del carrito:', error);
+            toast.error('Ha ocurrido un error, intentalo mas tarde...', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         }
     };
 
@@ -59,44 +89,79 @@ const Carrito: React.FC = () => {
             const response = await dispatch(buyProductsInShoppingCart(data));
 
             if (response.meta.requestStatus === 'fulfilled') {
-                dispatch(fetchShoppingCart({ user_token: currentUser?.token, user_id: currentUser?.id_usuario }));
+
+                toast('Procesando tú compra', {
+                    position: "bottom-right",
+                    autoClose: 2500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+
+                // Retrasar la actualización del carrito
+                setTimeout(() => {
+                    dispatch(fetchShoppingCart({
+                        user_token: currentUser?.token,
+                        user_id: currentUser?.id_usuario
+                    }));
+                }, 1000);
+                alert('Ha Finalizado su compra, estaremos en contacto por su EMAIL, para informarle!');
+                alert('Se ha terminado las acciónes del demo, muchas gracias :D');
             }
         } catch (error) {
             console.error('Error al eliminar del carrito:', error);
+            toast.error('Ha ocurrido un error, intentalo más tarde...', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         }
     };
 
     return (
-        <div className="shopping-cart">
-            <h1 className="cart-title">Carrito de Compras</h1>
-            <div className="cart-items">
-                {cart.ids.map((id) => {
-                    const item = cart.entities[id];
-                    return (
-                        <div className="cart-item" key={id}>
-                            <img src={item.imagen_producto} alt={item.nombre_producto} className="cart-item-image" />
-                            <div className="cart-item-details">
-                                <h2 className="cart-item-name">{item.nombre_producto}</h2>
-                                <p className="cart-item-price"><strong>Precio:</strong> ${item.precio_producto}</p>
-                                <p className="cart-item-quantity"><strong>Cantidad:</strong> {item.cantidad_seleccionada}</p>
-                                <p className="cart-item-shipping"><strong>Coste de envío:</strong> ${item.precio_envio}</p>
-                                <button className="cart-button-remove" onClick={() => handleClickToEliminate(`${id}`)}>
-                                    Eliminar
-                                </button>
+        <>
+            <ToastContainer />
+            <div className="shopping-cart">
+                <h1 className="cart-title">Carrito de Compras</h1>
+                <div className="cart-items">
+                    {cart.ids.map((id) => {
+                        const item = cart.entities[id];
+                        return (
+                            <div className="cart-item" key={id}>
+                                <img src={item.imagen_producto} alt={item.nombre_producto} className="cart-item-image" />
+                                <div className="cart-item-details">
+                                    <h2 className="cart-item-name">{item.nombre_producto}</h2>
+                                    <p className="cart-item-price"><strong>Precio:</strong> ${item.precio_producto}</p>
+                                    <p className="cart-item-quantity"><strong>Cantidad:</strong> {item.cantidad_seleccionada}</p>
+                                    <p className="cart-item-shipping"><strong>Coste de envío:</strong> ${item.precio_envio}</p>
+                                    <button className="cart-button-remove" onClick={() => handleClickToEliminate(`${id}`)}>
+                                        Eliminar
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
+                <div className="cart-summary">
+                    <h2 className="cart-summary-title">Resumen</h2>
+                    <p className="cart-summary-total"><strong>Total: ${totalPrice.toFixed(2)}</strong></p>
+                    <p className="cart-summary-shipping"><strong>Total de envío: ${totalShipping.toFixed(2)}</strong></p>
+                    <button className="cart-button-checkout" onClick={handleClickToBuy}>
+                        Finalizar Compra
+                    </button>
+                </div>
             </div>
-            <div className="cart-summary">
-                <h2 className="cart-summary-title">Resumen</h2>
-                <p className="cart-summary-total"><strong>Total: ${totalPrice.toFixed(2)}</strong></p>
-                <p className="cart-summary-shipping"><strong>Total de envío: ${totalShipping.toFixed(2)}</strong></p>
-                <button className="cart-button-checkout" onClick={handleClickToBuy}>
-                    Finalizar Compra
-                </button>
-            </div>
-        </div>
+        </>
     );
 };
 

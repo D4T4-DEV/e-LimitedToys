@@ -8,6 +8,7 @@ import { addProductToShoppingCart } from '../redux/Trunks/shoppingCartThunk';
 import { Product } from '../Interfaces/ProductInterface';
 import { useNavigate } from 'react-router-dom';
 import { msgQuererComprar } from '../redux/Slides/notificationsSlice';
+import { toast, Bounce, ToastContainer } from 'react-toastify';
 
 const Home: React.FC = () => {
 
@@ -118,9 +119,44 @@ const Home: React.FC = () => {
       // Manejo de los resultados del despachador
       if (response.payload === 'Cantidad excede las existencias disponibles en el inventario') {
         console.warn('No se agregado porque ya no tenemos tantos en stock');
+        toast('Haz seleccionado el máximo de este producto', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        return;
       }
+      // Si todo va bien tomará esta acción
+      toast('Agregaste este producto al carrito', {
+        position: "bottom-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (error) {
       console.error("Error al agregar al carrito:", error);
+      toast.error('Ha ocurrido un error, intentalo más tarde...', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -243,6 +279,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };
