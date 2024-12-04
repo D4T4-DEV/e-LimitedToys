@@ -195,6 +195,7 @@
   padding: 2rem;
   border-radius: 8px;
   max-width: 500px;
+  max-height: 99%;
   width: 90%;
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -202,7 +203,7 @@
 
 .modal-content img {
   width: 100%;
-  max-height: 300px;
+  max-height: 270px;
   height: auto;
   margin-bottom: 1rem;
   border-radius: 8px;
@@ -211,13 +212,12 @@
 }
 
 .modal-content h1 {
-  font-size: 45px;
+  font-size: 30px;
   color: #404040;
-  margin-bottom: 1rem;
 }
 
 .modal-content h3 {
-  font-size: 25px;
+  font-size: 20px;
   color: #404040;
   text-align: end;
 }
