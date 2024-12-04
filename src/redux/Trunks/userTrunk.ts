@@ -50,18 +50,23 @@ export const cargarImagenPerfil = createAsyncThunk(
   "auth/cargarImagenPerfil",
   async (user: User, { rejectWithValue }) => {
     try {
-      if (!user || !user.url_prof_pic || !user.token) {
+      if (!user || !user.token) {
         return rejectWithValue("Faltan datos del usuario o del token");
       }
 
       // Construir la URL completa si comienza con "uploads/"
-      let urlImagen = user.url_prof_pic;
+      let urlImagen = user.url_prof_pic || user.prof_pic;
+
+      if (!urlImagen) {
+        return rejectWithValue("No se proporcionó una URL válida para la imagen de perfil");
+      }
+
       if (urlImagen.startsWith("uploads/")) {
         urlImagen = `${VITE_URL_API}/${urlImagen}`;
       }
 
       // Verificar que esta exista y no tenga null al final
-      if (!urlImagen || urlImagen.endsWith("/null")) {
+      if (urlImagen.endsWith("/null")) {
         return rejectWithValue("La URL de la imagen de perfil no es válida");
       }
 
@@ -147,7 +152,7 @@ export const editNickName = createAsyncThunk(
 export const editAdressUser = createAsyncThunk(
   "user/editAdressUser",
   async (user: User, { rejectWithValue }) => {
-    
+
     try {
       const response = await axios.put(
         `${VITE_URL_API}/usuarios/edit-direccion/`,

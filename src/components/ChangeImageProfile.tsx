@@ -8,6 +8,7 @@ import LoadingModal from "./LoadignModal";
 import { cargarImagenPerfil, deleteImgProfile, editImgProfile } from "../redux/Trunks/userTrunk";
 import Cookies from "js-cookie";
 import { encryptSessionIndicator } from "../security/Encr_decp";
+import { LimpiarURL } from "../redux/Slides/userSlice";
 
 interface UserProfileProps {
     prof_pic?: string;
@@ -68,6 +69,7 @@ const ChangeProfileIMG: React.FC<UserProfileProps> = ({ prof_pic, token, id }) =
                     if (!uploadCorrect) {
                         throw new Error('Tuvimos problemas para subir la imagen, inténtalo más tarde');
                     }
+                    dispatch(LimpiarURL()); // Limpia la URL
                     setImagePath(undefined); // Borra la imagen
                     const updatedUserCookie = {
                         id_usuario: currentUser?.id_usuario,
@@ -85,6 +87,7 @@ const ChangeProfileIMG: React.FC<UserProfileProps> = ({ prof_pic, token, id }) =
                         secure: true, // Solo en conexiones HTTPS
                         sameSite: "Strict", // Prevenir ataques CSRF
                     });
+
                 } else if (deleteImgProfile.rejected.match(resultAction)) {
                     const errorMessage = resultAction?.payload as string || 'Error al subir la imagen.';
                     throw new Error(errorMessage);
@@ -120,11 +123,12 @@ const ChangeProfileIMG: React.FC<UserProfileProps> = ({ prof_pic, token, id }) =
             // Manejor de la respuesta del cambio
             if (editImgProfile.fulfilled.match(resultAction)) {
                 const uploadCorrect = resultAction.payload;
-
+                
                 if (!uploadCorrect) {
                     throw new Error('Tuvimos problemas para cambiar la imagen, inténtalo más tarde');
                 }
-
+                
+                dispatch(LimpiarURL()); // Limpia la URL
                 const updatedUserCookie = {
                     id_usuario: currentUser?.id_usuario,
                     nick: currentUser?.nick,
