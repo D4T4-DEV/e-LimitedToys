@@ -211,19 +211,19 @@
 }
 
 .modal-content h1 {
-  font-size: 40px;
+  font-size: 45px;
   color: #404040;
   margin-bottom: 1rem;
 }
 
 .modal-content h3 {
-  font-size: 30px;
+  font-size: 25px;
   color: #404040;
   text-align: end;
 }
 
 .modal-content p {
-  font-size: 18px;
+  font-size: 13px;
   color: #404040;
   margin-bottom: 1rem;
 }
@@ -277,15 +277,15 @@
     width: 100%;
   }
   
-  .modal-overlay h1 {
+  .modal-content h1 {
     font-size: 25px;
   }
 
-  .modal-overlay p {
+  .modal-content p {
     font-size: 15px;
   }
 
-  .modal-overlay h3 {
+  .modal-content h3 {
     font-size: 20px;
   }
 }
