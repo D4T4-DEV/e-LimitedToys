@@ -191,15 +191,15 @@
   color: #404040;
 }
 
-.text-section p.not-stock {
+.text-section p.not-stock{
   font-size: 0.95rem;
-  color: #ff0000;
+  color: #404040;
   margin: 0;
 }
 
 .text-section p.stock {
   font-size: 0.95rem;
-  color: #27ae60;
+  color: #404040;
   margin: 0;
 }
 
