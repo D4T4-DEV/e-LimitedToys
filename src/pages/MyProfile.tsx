@@ -147,7 +147,7 @@ const MyProfile: React.FC = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="125"
                                 height="125"
-                                fill="currentColor"
+                                fill="#404040"
                                 className="user"
                                 viewBox="0 0 16 16"
                             >
