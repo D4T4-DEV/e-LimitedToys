@@ -173,40 +173,48 @@ const ChangeProfileIMG: React.FC<UserProfileProps> = ({ prof_pic, token, id }) =
 
     return (
         <>
-            <form>
-                <p>Cambiar/ Borrar / Subir imagen de perfil</p>
+            <form className="profile-form">
+                <p className="profile-form-title">Editar imagen de perfil</p>
                 <input
                     type="file"
+                    className="profile-form-input"
                     accept="image/jpeg, image/png, image/webp, image/gif"
                     onChange={handleImageChange}
                     ref={fileInputRef} // Asigna la referencia al input
                 />
 
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '200px' }}>
+                <div className="profile-preview-container">
                     {preview && (
-                        <div>
-                            <h3>Vista Previa:</h3>
-                            <img src={preview} alt="Vista previa" style={{ maxWidth: '125px', maxHeight: '125px', borderRadius: '50%' }} />
-                            <div className="btn-container">
+                        <div className="profile-preview">
+                            <h3 className="profile-preview-title">Vista Previa:</h3>
+                            <img
+                                src={preview}
+                                alt="Vista previa"
+                                className="profile-preview-image"
+                            />
+                            <div className="profile-buttons-container">
                                 <button
                                     type="button"
-                                    className="button-signup"
+                                    className="profile-button profile-button-change"
                                     onClick={() => openModal("change")}
                                 >
-                                    Cambiar la imagen
+                                    Confirmar imagen
                                 </button>
                             </div>
                         </div>
                     )}
                 </div>
-                <div>
+                
+                <div className="profile-buttons-container">
                     <button
                         type="button"
-                        className="button-signup"
+                        className="profile-button profile-button-delete"
                         onClick={() => openModal("delete")}
                         disabled={!imagePath && !preview} // Desactiva si no hay ruta ni vista previa
                     >
-                        {imagePath && !preview? 'Borrar imagen antigua' : 'Borrar imagen seleccionada'}
+                        {imagePath && !preview
+                            ? "Borrar imagen actual"
+                            : "Descartar imagen seleccionada"}
                     </button>
                 </div>
             </form>
