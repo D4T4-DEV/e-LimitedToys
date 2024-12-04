@@ -19,7 +19,7 @@ const ProductCatalog: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null); // Medio usado para mostrar el detalle del producto
 
   // Obtener el estado de Redux
-  const { entities, ids, status, allProductsError, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+  const { entities, ids, status, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
   const { statusFilter, Marcas, precioMinimo, precioMaximo, searchTerm } = useSelector((state: RootState) => state.filter);
   const { currentUser } = useSelector((state: RootState) => state.users);
 
@@ -70,10 +70,6 @@ const ProductCatalog: React.FC = () => {
     if (allProductsStatus === 'idle') {
       dispatch(fetchAllProducts());
     }
-    if (statusFilter === 'idle') {
-      dispatch(fetchFilterProducts());
-    }
-
     if (allProductsStatus === 'failed') {
       // Temporizador a 10s
       const timer = setTimeout(() => {
@@ -82,6 +78,15 @@ const ProductCatalog: React.FC = () => {
 
       // Limpia el temporizador
       return () => clearTimeout(timer);
+    }
+
+
+  }, [dispatch, allProductsStatus]);
+
+  // Aspecto para obtener los filtros 
+  useEffect(() => {
+    if (statusFilter === 'idle') {
+      dispatch(fetchFilterProducts());
     }
 
     if (statusFilter === 'failed') {
@@ -93,15 +98,14 @@ const ProductCatalog: React.FC = () => {
       // Limpia el temporizador
       return () => clearTimeout(timer);
     }
-
-  }, [dispatch, allProductsStatus, statusFilter]);
+  }, [dispatch, statusFilter]);
 
   useEffect(() => {
     if (statusFilter === 'succeeded') {
       setPriceMax(Number(precioMaximo) || 100);
       setPriceMin(Number(precioMinimo) || 0);
     }
-  }, [dispatch, statusFilter]);
+  }, [statusFilter]);
 
   // Filtrar productos usando tanto `entities` como `allProductsEntities`
   const filteredProducts = [
@@ -236,8 +240,8 @@ const ProductCatalog: React.FC = () => {
               className="loading"
             />
           </div>
-        ) : allProductsError ? (
-          <p style={{textAlign: 'center'}}>Ha ocurrido un error, lo volveremos a intentar 🙌</p>
+        ) : allProductsStatus === 'failed' ? (
+          <p style={{ textAlign: 'center' }}>Ha ocurrido un error, lo volveremos a intentar 🙌</p>
         ) :
           filteredProducts.length > 0 ? (
             <div className="products-grid">
