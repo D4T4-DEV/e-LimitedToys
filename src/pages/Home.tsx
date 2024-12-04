@@ -14,8 +14,8 @@ const Home: React.FC = () => {
 
   // Uso del redux
   const dispatch = useDispatch<AppDispatch>();
-  const { images, status: bannersStatus, error: bannersError } = useSelector((state: RootState) => state.banners);
-  const { featuredEntities, featuredIds, status: productsStatus, error: productsError } = useSelector((state: RootState) => state.products);
+  const { images, status: bannersStatus, /*error: bannersError */} = useSelector((state: RootState) => state.banners);
+  const { featuredEntities, featuredIds, status: productsStatus, /*error: productsError*/ } = useSelector((state: RootState) => state.products);
   const { currentUser } = useSelector((state: RootState) => state.users);
 
   const navigate = useNavigate();
