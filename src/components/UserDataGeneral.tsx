@@ -3,7 +3,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmationModal from "./ConfirmationModal";
-import './UserDataGeneral.css'
 
 // Esquema de validación para el nickname
 const nicknameSchema = z.object({
@@ -70,71 +69,54 @@ const UserProfile: React.FC<UserProfileProps> = ({
   };
 
   return (
-    <div className="profile-details">
-        <div className="profile-field">
-            <p className="profile-field-label">
-                <strong>Nombre completo</strong>:
-            </p>
-            <p className="profile-field-value">
-                {currentUser.nombres} {currentUser.apellidos}
-            </p>
-        </div>
+    <div>
+      <p>
+        <strong>Nombre completo</strong>:
+      </p>
+      <p>
+        {currentUser.nombres} {currentUser.apellidos}
+      </p>
 
-        <div className="profile-field">
-            <p className="profile-field-label">
-                <strong>Nickname</strong>:
-            </p>
-            {!isEditingNickname ? (
-                <div className="profile-nickname-display">
-                    <p className="profile-field-value">
-                        {currentUser.nickname}
-                        <button
-                            className="profile-button profile-button-edit"
-                            onClick={handleEditClick}
-                        >
-                            Editar
-                        </button>
-                    </p>
-                </div>
-            ) : (
-                <form
-                    className="profile-nickname-form"
-                    onSubmit={handleSubmit(onSubmit)}
-                >
-                    <input
-                        type="text"
-                        className="profile-input"
-                        {...register("nickname")}
-                        placeholder="Introduce un nuevo nickname"
-                    />
-                    <button
-                        type="submit"
-                        className="profile-button-save"
-                    >
-                        Guardar
-                    </button>
-                    <button
-                        type="button"
-                        className="profile-button-cancel"
-                        onClick={handleCancelClick}
-                    >
-                        Cancelar
-                    </button>
-                    {errors.nickname && (
-                        <p className="profile-error">
-                            {errors.nickname.message}
-                        </p>
-                    )}
-                </form>
+      <div>
+        <p>
+          <strong>Nickname</strong>:
+        </p>
+        {!isEditingNickname ? (
+          <p>
+            {currentUser.nickname}
+            <button onClick={handleEditClick} style={{ marginLeft: "10px" }}>
+              Editar
+            </button>
+          </p>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} style={{ display: "inline" }}>
+            <input
+              type="text"
+              {...register("nickname")}
+              placeholder="Introduce un nuevo nickname"
+            />
+            <button type="submit">Guardar</button>
+            <button
+              type="button"
+              onClick={handleCancelClick}
+              style={{ marginLeft: "5px" }}
+            >
+              Cancelar
+            </button>
+            {errors.nickname && (
+              <p className="error" style={{ color: "red" }}>
+                {errors.nickname.message}
+              </p>
             )}
-        </div>
-          
-        <div className="profile-field">
-            <p className="profile-field-label">
-                <strong>Correo electrónico registrado</strong>:
-            </p>
-            <p className="profile-field-value">{currentUser.email}</p>
-        </div>
+          </form>
+        )}
+      </div>
+
+      <p>
+        <strong>Correo electrónico registrado</strong>:
+      </p>
+      <p>{currentUser.email}</p>
+
       {/* Modal de confirmación */}
       <ConfirmationModal
         message={`¿Confirmas que deseas cambiar tu nickname a "${newNickname}"?`}

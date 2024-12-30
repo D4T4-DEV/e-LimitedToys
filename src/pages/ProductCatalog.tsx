@@ -4,11 +4,6 @@ import { AppDispatch, RootState } from '../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProducts } from '../redux/Trunks/productsTrunks';
 import { fetchFilterProducts } from '../redux/Trunks/filterThunks';
-import { Product } from '../Interfaces/ProductInterface';
-import { msgQuererComprar } from '../redux/Slides/notificationsSlice';
-import { useNavigate } from 'react-router-dom';
-import { addProductToShoppingCart } from '../redux/Trunks/shoppingCartThunk';
-import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,11 +14,8 @@ const ProductCatalog: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null); // Medio usado para mostrar el detalle del producto
 
   // Obtener el estado de Redux
-  const { entities, ids, status, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
+  const { entities, ids, status, allProductsError, allProductsEntities, allProductsIds, allProductsStatus } = useSelector((state: RootState) => state.products);
   const { statusFilter, Marcas, precioMinimo, precioMaximo, searchTerm } = useSelector((state: RootState) => state.filter);
-  const { currentUser } = useSelector((state: RootState) => state.users);
-
-  const navigate = useNavigate();
 
   const openModal = (product: any) => {
     setSelectedProduct(product);
@@ -70,42 +62,17 @@ const ProductCatalog: React.FC = () => {
     if (allProductsStatus === 'idle') {
       dispatch(fetchAllProducts());
     }
-    if (allProductsStatus === 'failed') {
-      // Temporizador a 10s
-      const timer = setTimeout(() => {
-        dispatch(fetchAllProducts()); // Reintentamos
-      }, 10000);
-
-      // Limpia el temporizador
-      return () => clearTimeout(timer);
-    }
-
-
-  }, [dispatch, allProductsStatus]);
-
-  // Aspecto para obtener los filtros 
-  useEffect(() => {
     if (statusFilter === 'idle') {
       dispatch(fetchFilterProducts());
     }
-
-    if (statusFilter === 'failed') {
-      // Temporizador a 10s
-      const timer = setTimeout(() => {
-        dispatch(fetchFilterProducts()); // Reintentamos
-      }, 10000);
-
-      // Limpia el temporizador
-      return () => clearTimeout(timer);
-    }
-  }, [dispatch, statusFilter]);
+  }, [dispatch, allProductsStatus, statusFilter]);
 
   useEffect(() => {
     if (statusFilter === 'succeeded') {
       setPriceMax(Number(precioMaximo) || 100);
       setPriceMin(Number(precioMinimo) || 0);
     }
-  }, [statusFilter]);
+  }, [dispatch, statusFilter]);
 
   // Filtrar productos usando tanto `entities` como `allProductsEntities`
   const filteredProducts = [
@@ -118,74 +85,6 @@ const ProductCatalog: React.FC = () => {
     const matchesAvailability = onlyAvailable ? product.existencia > 0 : true;
     return matchesSearch && matchesCategory && matchesPrice && matchesAvailability;
   });
-
-  const handleClickToShopping = async (product: Product) => {
-
-    if (!currentUser || Object.keys(currentUser).length === 0) {
-      // Dispatch de un mensaje informativo
-      dispatch(msgQuererComprar());
-
-      // Redirige al usuario a la página de inicio de sesión
-      navigate('/login');
-      return; // Sale de esta funcion
-    }
-
-    try {
-      // Datos que a enviar
-      const data = {
-        user_id: currentUser?.id_usuario,
-        product_id: product.id_producto,
-        user_token: currentUser?.token,
-        existencias: '1',
-      };
-
-      // Ejecutar el despachador
-      const response = await dispatch(addProductToShoppingCart(data));
-
-      // Manejo del resultados
-      // console.log("Producto agregado al carrito:", response);
-      if (response.payload === 'Cantidad excede las existencias disponibles en el inventario') {
-        console.warn('No se agregado porque ya no tenemos tantos en stock');
-        toast('Haz seleccionado el máximo de este producto', {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        return;
-      }
-      // Si todo va bien tomará esta acción
-      toast('Agregaste este producto al carrito', {
-        position: "bottom-right",
-        autoClose: 2500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    } catch (error) {
-      console.error("Error al agregar al carrito:", error);
-      toast.error('Ha ocurrido un error, intentalo más tarde...', {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-  };
 
   return (
     <div className="catalog-container">
@@ -240,8 +139,8 @@ const ProductCatalog: React.FC = () => {
               className="loading"
             />
           </div>
-        ) : allProductsStatus === 'failed' ? (
-          <p style={{ textAlign: 'center' }}>Ha ocurrido un error, lo volveremos a intentar 🙌</p>
+        ) : allProductsError ? (
+          <p>{allProductsError}</p>
         ) :
           filteredProducts.length > 0 ? (
             <div className="products-grid">
@@ -276,13 +175,12 @@ const ProductCatalog: React.FC = () => {
             <div className="modal-body">
               <h1>{selectedProduct.nombre_producto}</h1>
               <p>{selectedProduct.descripcion}</p>
-              <h3>${selectedProduct.precio_producto}</h3>
-              <button className="add-btn" onClick={() => handleClickToShopping(selectedProduct)}>Agregar a la bolsa</button>
+              <h3>Descripción de la Franquicia</h3>
+              <p>{selectedProduct.franchiseDescription}</p>
             </div>
           </div>
         </div>
       )}
-      <ToastContainer />
     </div>
   );
 };

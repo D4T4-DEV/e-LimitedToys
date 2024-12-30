@@ -49,29 +49,18 @@ export const registrarUsuario = createAsyncThunk(
 export const cargarImagenPerfil = createAsyncThunk(
   "auth/cargarImagenPerfil",
   async (user: User, { rejectWithValue }) => {
+
+
+    if (user.url_prof_pic == null || user.url_prof_pic.endsWith("/null")) {
+      return rejectWithValue("La URL de la imagen de perfil no es válida");
+    }
+    
+    if (!user || !user.url_prof_pic || !user.token) {
+      return rejectWithValue("Faltan datos del usuario o del token");
+    }
+
     try {
-      if (!user || !user.token) {
-        return rejectWithValue("Faltan datos del usuario o del token");
-      }
-
-      // Construir la URL completa si comienza con "uploads/"
-      let urlImagen = user.url_prof_pic || user.prof_pic;
-
-      if (!urlImagen) {
-        return rejectWithValue("No se proporcionó una URL válida para la imagen de perfil");
-      }
-
-      if (urlImagen.startsWith("uploads/")) {
-        urlImagen = `${VITE_URL_API}/${urlImagen}`;
-      }
-
-      // Verificar que esta exista y no tenga null al final
-      if (urlImagen.endsWith("/null")) {
-        return rejectWithValue("La URL de la imagen de perfil no es válida");
-      }
-
-      // Realizar la solicitud para cargar la imagen
-      const response = await axios.get(urlImagen, {
+      const response = await axios.get(user.url_prof_pic, {
         headers: {
           Authorization: `${user.token}`, // Token dado al loguearse
           "Content-Type": "application/json",
@@ -79,8 +68,7 @@ export const cargarImagenPerfil = createAsyncThunk(
         responseType: "blob", // Respuesta como Blob
       });
 
-      // Crear un objeto Blob y devolver la URL local
-      const url_img_blob = URL.createObjectURL(response.data);
+      const url_img_blob = URL.createObjectURL(response.data); // Crear URL del Blob
       return url_img_blob;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -91,11 +79,10 @@ export const cargarImagenPerfil = createAsyncThunk(
   }
 );
 
-
 // Thunk para obtener los datos del perfil del usuario
 export const obtenerDatosDelPerfil = createAsyncThunk(
   "user/obtenerDatosDelPerfil",
-  async (user: User, { rejectWithValue }) => {
+  async ( user: User, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${VITE_URL_API}/usuarios/obtener-datos/${user.id_usuario}`, {
         headers: {
@@ -152,7 +139,7 @@ export const editNickName = createAsyncThunk(
 export const editAdressUser = createAsyncThunk(
   "user/editAdressUser",
   async (user: User, { rejectWithValue }) => {
-
+    console.log(user);
     try {
       const response = await axios.put(
         `${VITE_URL_API}/usuarios/edit-direccion/`,
@@ -192,6 +179,7 @@ export const editImgProfile = createAsyncThunk(
   "user/editImgProfile",
   async (user: User, { rejectWithValue }) => {
 
+    console.log('TRAMITE', user);
     try {
       const response = await axios.put(
         `${VITE_URL_API}/usuarios/edit-photo/`,
@@ -226,17 +214,22 @@ export const deleteImgProfile = createAsyncThunk(
   "user/deleteImgProfile",
   async (user: User, { rejectWithValue }) => {
 
+    console.log('TRAMITE', user);
     try {
-      const response = await axios.delete(`${VITE_URL_API}/usuarios/delete-photo`, {
-        data: {
+      const response = await axios.put(
+        `${VITE_URL_API}/usuarios/delete-photo`,
+        {
           datos: {
             id_usuario: `${user.id_usuario}`,
+          }
+        },
+        {
+          headers: {
+            Authorization: `${user.token}`, // Token dado al loguearse
+            "Content-Type": "application/json",
           },
-        },
-        headers: {
-          Authorization: `${user.token}`,
-        },
-      });
+        }
+      );
 
       return response.data?.status;
     } catch (error) {

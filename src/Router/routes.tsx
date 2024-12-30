@@ -6,7 +6,6 @@ import MyProfile from '../pages/MyProfile';
 import ProductCatalog from '../pages/ProductCatalog';
 import useMonitorCookie from "../Cookies/monitorCookies";
 import Contact from "../pages/Contact";
-import Carrito from "../pages/carrito";
 
 
 const routes: RouteObject[] = [
@@ -33,10 +32,6 @@ const routes: RouteObject[] = [
   {
     path: '/contact',
     element: <Contact/>,
-  },
-  {
-    path: '/carrito',
-    element: <Carrito/>,
   }
 ];
 

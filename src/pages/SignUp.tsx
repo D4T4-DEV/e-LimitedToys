@@ -233,7 +233,7 @@ const SignUp: React.FC = () => {
             onSubmit={handleSubmit(handleNextStep)}
             className={`form-step ${exiting ? 'exiting' : 'active'}`}
           >
-            <p style={{color: '#404040'}}>Aspectos opcionales</p>
+            <p>Aspectos opcionales</p>
             <input type="text" placeholder="Calle" defaultValue={formData.calle} {...register('calle')} />
             <input type="text" placeholder="Colonia" defaultValue={formData.colonia} {...register('colonia')} />
             <input type="text" placeholder="Ciudad" defaultValue={formData.ciudad} {...register('ciudad')} />
@@ -251,7 +251,7 @@ const SignUp: React.FC = () => {
             onSubmit={handleSubmit(handleSignUp)}
             className={`form-step ${exiting ? 'exiting' : 'active'}`}
           >
-            <p style={{color: '#404040'}}>Aspectos opcionales</p>
+            <p>Aspectos opcionales</p>
             <input type="file" accept="image/jpeg, image/png, image/webp, image/gif" onChange={handleImageChange} size={10 * 1024 * 1024} />
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '200px' }}>

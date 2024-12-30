@@ -56,14 +56,6 @@ export const authSlice = createSlice({
         limpiarError(state) {
             state.error = null;
         },
-        LimpiarURL(state) { // Limpia la URL mandada de la API (esto ayuda a seleccionar la imagen más reciente)
-            if (state.currentUser) {
-                state.currentUser = {
-                    ...state.currentUser,
-                    url_prof_pic: '',
-                };
-            }
-        },
     },
     extraReducers: (builder) => {
         builder
@@ -136,5 +128,5 @@ export const authSlice = createSlice({
 });
 
 
-export const { cerrarSesion, limpiarError, LimpiarURL } = authSlice.actions;
+export const { cerrarSesion, limpiarError } = authSlice.actions;
 export default authSlice.reducer;

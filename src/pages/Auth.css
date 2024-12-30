@@ -3,8 +3,8 @@
   margin: 2rem auto;
   padding: 1.5rem;
   border-radius: 8px;
-  background: linear-gradient(135deg, #f9fafb, #e7e7e7);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.30);
+  background: linear-gradient(135deg, #222, #2a2a2a);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); 
   overflow: hidden;
   position: relative;
   min-height: 535px;
@@ -14,7 +14,7 @@
   font-size: 2rem;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: #404040;
+  color: #fff;
 }
 
 .auth-container.login {
@@ -24,7 +24,7 @@
 .auth-container h3 {
   font-size: 1rem;
   text-align: center;
-  color: #404040;
+  color: #fff;
 }
 
 .link-auth {
@@ -84,15 +84,14 @@
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #fff;
-  color: #333;
+  background-color: #333;
+  color: #fff;
   width: 100%;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .auth-container input:focus {
   border-color: #4a90e2;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.8);
   outline: none;
 }
 
@@ -122,13 +121,15 @@
 
 .auth-container button.button-back {
   background: none;
-  color: #4a90e2;
-  font-weight: bold;
-  margin-right: 9.8rem;
+  margin-right: 10.38rem;
 }
 
 .auth-container button.button-signup:hover {
   background-color: #357ab8;
+}
+
+.auth-container button.button-back:hover {
+  background-color: #d28328;
 }
 
 .step-indicator {
@@ -154,42 +155,3 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
     }
-
-@media only screen and (max-width: 600px) {
-  .auth-container {
-    min-height: 560px;
-    width: 90%;
-  }
-
-  .buttons{
-    display: flex;
-    flex-direction: row;
-  }
-
-  /* .auth-container button.button-signup {
-  } */
-  
-  .auth-container button.button-back {
-    margin-right: 8rem;
-  }
-
-  .auth-container.login {
-    min-height: auto;
-    width: 90%;
-  }
-
-  .auth-container h2 {
-    font-size: 1.6rem;
-  }
-
-  .auth-container.login button {
-    padding: 0.75rem;
-    font-size: 0.9rem;
-    margin-left: 62%;
-    min-width: 109px;
-  }
-
-  .auth-container h3 {
-    font-size: 0.8rem;
-  }
-}
