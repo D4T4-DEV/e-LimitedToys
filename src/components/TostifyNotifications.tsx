@@ -17,7 +17,7 @@ export const generateWarningTostify = (msg: string | undefined): ReactNode => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: 'light',
         transition: Bounce,
         closeButton: <CloseButtonTostify />,
         toastId: msg, // Usamos el mensaje como ID (evitara duplicados)
@@ -39,7 +39,7 @@ export const generateErrorTostify = (msg: string | undefined): ReactNode => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: 'light',
         transition: Bounce,
         closeButton: <CloseButtonTostify />,
         toastId: msg, // Usamos el mensaje como ID (evitara duplicados)
@@ -61,7 +61,7 @@ export const generateInfoTostify = (msg: string | undefined): ReactNode => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: 'light',
         transition: Bounce,
         closeButton: <CloseButtonTostify />,
         toastId: msg, // Usamos el mensaje como ID (evitara duplicados)

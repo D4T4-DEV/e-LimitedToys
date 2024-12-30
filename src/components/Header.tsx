@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
+import './ProfileIcon.css';
 import logoIcon from '../img/logo.png';
-import defaultUserImgProfile from '../img/default-user.png';
+import ProfileIcon from './ProfileIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { cargarImagenPerfil } from '../redux/Trunks/userTrunk';
@@ -17,6 +18,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = () => {
 
   const [inputValue, setInputValue] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { currentUser, profileImage } = useSelector(
     (state: RootState) => state.users
@@ -37,9 +41,14 @@ const Header: React.FC<HeaderProps> = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    navigate('/mi-perfil');
+    setDropdownOpen(false);
+  };
+
   const handleShoppingCartClick = () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
-      navigate('/mi-carrito');
+      navigate('/carrito');
     } else {
       dispatch(msgQuererVerCarrito());
       navigate('/login');
@@ -61,12 +70,17 @@ const Header: React.FC<HeaderProps> = () => {
 
   // Función para redirigir al login
   const handleLogoutClick = () => {
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      dispatch(cerrarSesion());
-      dispatch(msgCerrarSesion());
-      navigate('/login');
+    dispatch(cerrarSesion());
+    dispatch(msgCerrarSesion());
+    navigate('/login');
+    setDropdownOpen(false);
+  };
+
+  // Función para cerrar el dropdown del usuario al dar clic fuera
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setDropdownOpen(false); 
     }
-    return;
   };
 
   // Petición para obtener la imagen de perfil al cargar Redux
@@ -81,7 +95,7 @@ const Header: React.FC<HeaderProps> = () => {
     if (profileImage) {
       setImageSrc(profileImage); // Si `profileImage` es valida lo usara
     } else {
-      setImageSrc(defaultUserImgProfile); // Si no usara esto
+      setImageSrc(null); // Si no usara esto
     }
   }, [profileImage]);
 
@@ -94,18 +108,23 @@ const Header: React.FC<HeaderProps> = () => {
     }
   }, [location]);
 
+  // Use effect para cerrar el dropdown al dar clic afuera
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
     <header className="header">
       <div className="header_logo">
-        <img src={logoIcon} alt="Logo" className="logo-image" />
+        <Link to="/">
+          <img src={logoIcon} alt="Logo" className="logo-image" />
+        </Link>
       </div>
       <nav className="header_nav">
         <ul className="header_nav-list">
-          <li className="header_nav-item">
-            <Link to="/" className="header_nav-link">
-              Inicio
-            </Link>
-          </li>
           <li className="header_nav-item">
             <Link to="/catalog" className="header_nav-link">
               Catálogo
@@ -140,37 +159,33 @@ const Header: React.FC<HeaderProps> = () => {
             <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z" />
           </svg>
         </span>
+        {/*esto viene del componente ProfileIcon*/}
         {currentUser ? (
-          <span className="icon" onClick={handleLoginClick}>
-            {imageSrc ? (
-              <img
-                src={imageSrc}
-                alt="Perfil"
-                className="profile-image"
-                style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
-              />
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                className="user"
-                viewBox="0 0 16 16"
-              >
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                <path
-                  fillRule="evenodd"
-                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-                />
-              </svg>
+          <div className="dropdown" ref={dropdownRef}>
+            <ProfileIcon imageSrc={imageSrc} onClick={toggleDropdown} />
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <button onClick={handleProfileClick}>
+                  <svg xmlns="http://www.w3.org/2000/svg" 
+                  height="14px" 
+                  viewBox="0 -960 960 960" 
+                  width="14px" 
+                  fill="currentColor">
+                  <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
+                  </svg>
+                  Ver Perfil</button>
+                <button onClick={handleLogoutClick}>
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                height="14px" 
+                viewBox="0 -960 960 960" 
+                width="14px" 
+                fill="currentColor">
+                  <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
+                  </svg>
+                  Cerrar Sesión</button>
+              </div>
             )}
-          </span>
+          </div>
         ) : (
           <span className="icon" onClick={handleLoginClick}>
             <svg
@@ -181,18 +196,6 @@ const Header: React.FC<HeaderProps> = () => {
               fill="currentColor"
             >
               <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
-            </svg>
-          </span>
-        )}
-        {currentUser && (
-          <span className="icon" onClick={handleLogoutClick}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24"
-              width="24"
-              viewBox="0 -960 960 960"
-              fill="currentColor">
-              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
             </svg>
           </span>
         )}
