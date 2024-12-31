@@ -7,7 +7,7 @@ interface ShoppingCart {
     user_id?: string;
     product_id?: string;
     user_token?: string;
-    existencias?: string;
+    existencias?: string | number;
 }
 
 // Thunk para agregar un producto al carrito
@@ -33,6 +33,43 @@ export const addProductToShoppingCart = createAsyncThunk(
             // Petición 
             const response = await axios.post(
                 `${VITE_URL_API}/carrito/add`,
+                body,
+                { headers }
+            );
+
+            return response.data?.data;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                return rejectWithValue(error.response?.data?.message || "Error en la petición en agregar al carrito");
+            }
+            return rejectWithValue("Error desconocido");
+        }
+    }
+);
+
+// Thunk para modificar la cantidad 
+export const modifyProductToShoppingCart = createAsyncThunk(
+    'shoppingCart/modifyProductToShoppingCart',
+    async (data: ShoppingCart, { rejectWithValue }) => {
+        try {
+            // Contenido del encabezado
+            const headers = {
+                Authorization: data.user_token,
+                "Content-Type": "application/json",
+            };
+
+            // Contenido de la petición en "body"
+            const body = {
+                datos: {
+                    id_usuario: `${data.user_id}`,
+                    id_producto: `${data.product_id}`,
+                    existencias: `${data.existencias}`,
+                },
+            };
+
+            // Petición 
+            const response = await axios.put(
+                `${VITE_URL_API}/carrito/edit`,
                 body,
                 { headers }
             );

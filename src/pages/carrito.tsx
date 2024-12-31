@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './carrito.css';
 import { AppDispatch, RootState } from '../redux/store';
-import { buyProductsInShoppingCart, eliminatedProductToShoppingCart, fetchShoppingCart } from '../redux/Trunks/shoppingCartThunk';
+import { buyProductsInShoppingCart, eliminatedProductToShoppingCart, fetchShoppingCart, modifyProductToShoppingCart } from '../redux/Trunks/shoppingCartThunk';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const Carrito: React.FC = () => {
@@ -43,7 +43,7 @@ const Carrito: React.FC = () => {
             const response = await dispatch(eliminatedProductToShoppingCart(data));
 
             if (response.meta.requestStatus === 'fulfilled') {
-                toast('Eliminaste el producto', {
+                toast('Quitaste del carrito el producto', {
                     position: "bottom-right",
                     autoClose: 2500,
                     hideProgressBar: true,
@@ -128,6 +128,77 @@ const Carrito: React.FC = () => {
         }
     };
 
+    const handleQuantityChange = async (productId: string, change: number, item: any) => {
+        try {
+            const newQuantity = item.cantidad_seleccionada + change;
+
+            // Verificar si la nueva cantidad es válida
+            if (newQuantity > 0) {
+                // Modificar el producto en el carrito
+                const response = await dispatch(
+                    modifyProductToShoppingCart({
+                        user_id: currentUser?.id_usuario,
+                        user_token: currentUser?.token,
+                        product_id: productId,
+                        existencias: change,
+                    })
+                );
+
+                // Confirmar que la acción fue exitosa
+                if (response.meta.requestStatus === 'fulfilled') {
+                    // Mostrar notificación según el cambio
+                    if (change > 0) {
+                        toast('Agregaste un producto', {
+                            position: "bottom-right",
+                            autoClose: 2500,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                        });
+                    } else {
+                        toast('Decrementaste un producto', {
+                            position: "bottom-right",
+                            autoClose: 2500,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                        });
+                    }
+
+                    setTimeout(() => {
+                        dispatch(fetchShoppingCart({
+                            user_token: currentUser?.token,
+                            user_id: currentUser?.id_usuario,
+                        }));
+                    }, 1000);
+                } else {
+                    throw new Error('No se pudo modificar el producto en el carrito.');
+                }
+            }
+        } catch (error) {
+            console.error('Error al modificar la cantidad del producto:', error);
+            toast.error('Ha ocurrido un error, intentalo más tarde...', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+    };
+
     return (
         <>
             <ToastContainer />
@@ -142,11 +213,43 @@ const Carrito: React.FC = () => {
                                 <div className="cart-item-details">
                                     <h2 className="cart-item-name">{item.nombre_producto}</h2>
                                     <p className="cart-item-price"><strong>Precio:</strong> ${item.precio_producto}</p>
-                                    <p className="cart-item-quantity"><strong>Cantidad:</strong> {item.cantidad_seleccionada}</p>
+                                    <p className="cart-item-quantity">
+                                        <strong>Cantidad:</strong>
+                                        <button
+                                            className={`cart-button-decrement ${item.cantidad_seleccionada === 1 ? "cart-button-remove" : ""}`}
+                                            onClick={() =>
+                                                item.cantidad_seleccionada === 1
+                                                    ? handleClickToEliminate(`${id}`)
+                                                    : handleQuantityChange(`${id}`, -1, item)
+                                            }
+                                        >
+                                            {item.cantidad_seleccionada === 1 ? (
+                                                <span role="img" aria-label="trash">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        height="13px"
+                                                        width="13px"
+                                                        viewBox="0 -960 960 960"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                                    </svg>
+                                                </span>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </button>
+                                        {item.cantidad_seleccionada}
+                                        <button
+                                            className="cart-button-increment"
+                                            onClick={() => handleQuantityChange(`${id}`, 1, item)}>
+                                            +
+                                        </button>
+                                    </p>
                                     <p className="cart-item-shipping"><strong>Coste de envío:</strong> ${item.precio_envio}</p>
-                                    <button className="cart-button-remove" onClick={() => handleClickToEliminate(`${id}`)}>
+                                    {/* <button className="cart-button-remove" onClick={() => handleClickToEliminate(id)}>
                                         Eliminar
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         );
