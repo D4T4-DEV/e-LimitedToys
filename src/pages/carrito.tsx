@@ -204,11 +204,25 @@ const Carrito: React.FC = () => {
             <ToastContainer />
             <div className="shopping-cart">
                 <h1 className="cart-title">Carrito de Compras</h1>
+                <div className="cart-summary">
+                    <h2 className="cart-summary-title">Resumen</h2>
+                    <p className="cart-summary-total"><strong>Total: ${totalPrice.toFixed(2)}</strong></p>
+                    <p className="cart-summary-shipping"><strong>Total de envío: ${totalShipping.toFixed(2)}</strong></p>
+                    <button className="cart-button-checkout" onClick={handleClickToBuy}>
+                        Finalizar Compra
+                    </button>
+                </div>
                 <div className="cart-items">
                     {cart.ids.map((id) => {
                         const item = cart.entities[id];
                         return (
                             <div className="cart-item" key={id}>
+                                <button
+                                    className="cart-item-eliminated-button"
+                                    onClick={() => handleClickToEliminate(`${id}`)}
+                                >
+                                    ×
+                                </button>
                                 <img src={item.imagen_producto} alt={item.nombre_producto} className="cart-item-image" />
                                 <div className="cart-item-details">
                                     <h2 className="cart-item-name">{item.nombre_producto}</h2>
@@ -247,21 +261,10 @@ const Carrito: React.FC = () => {
                                         </button>
                                     </p>
                                     <p className="cart-item-shipping"><strong>Coste de envío:</strong> ${item.precio_envio}</p>
-                                    {/* <button className="cart-button-remove" onClick={() => handleClickToEliminate(id)}>
-                                        Eliminar
-                                    </button> */}
                                 </div>
                             </div>
                         );
                     })}
-                </div>
-                <div className="cart-summary">
-                    <h2 className="cart-summary-title">Resumen</h2>
-                    <p className="cart-summary-total"><strong>Total: ${totalPrice.toFixed(2)}</strong></p>
-                    <p className="cart-summary-shipping"><strong>Total de envío: ${totalShipping.toFixed(2)}</strong></p>
-                    <button className="cart-button-checkout" onClick={handleClickToBuy}>
-                        Finalizar Compra
-                    </button>
                 </div>
             </div>
         </>
