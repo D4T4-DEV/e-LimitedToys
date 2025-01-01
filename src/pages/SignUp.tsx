@@ -252,7 +252,7 @@ const SignUp: React.FC = () => {
             className={`form-step ${exiting ? 'exiting' : 'active'}`}
           >
             <p style={{color: '#404040'}}>Aspectos opcionales</p>
-            <input type="file" accept="image/jpeg, image/png, image/webp, image/gif" onChange={handleImageChange} size={10 * 1024 * 1024} />
+            <input type="file" accept="image/jpeg, image/png, image/webp, image/gif" onChange={handleImageChange} size={10 * 1024 * 1024} disabled />
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '200px' }}>
               <h3>Vista Previa:</h3>
