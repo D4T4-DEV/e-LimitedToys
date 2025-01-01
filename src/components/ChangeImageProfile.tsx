@@ -181,6 +181,7 @@ const ChangeProfileIMG: React.FC<UserProfileProps> = ({ prof_pic, token, id }) =
                     accept="image/jpeg, image/png, image/webp, image/gif"
                     onChange={handleImageChange}
                     ref={fileInputRef} // Asigna la referencia al input
+                    disabled
                 />
 
                 <div className="profile-preview-container">
@@ -210,7 +211,8 @@ const ChangeProfileIMG: React.FC<UserProfileProps> = ({ prof_pic, token, id }) =
                         type="button"
                         className="profile-button profile-button-delete"
                         onClick={() => openModal("delete")}
-                        disabled={!imagePath && !preview} // Desactiva si no hay ruta ni vista previa
+                        // disabled={!imagePath && !preview} // Desactiva si no hay ruta ni vista previa
+                        disabled
                     >
                         {imagePath && !preview
                             ? "Borrar imagen actual"
