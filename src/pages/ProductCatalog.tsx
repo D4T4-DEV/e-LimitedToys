@@ -9,6 +9,7 @@ import { msgQuererComprar } from '../redux/Slides/notificationsSlice';
 import { useNavigate } from 'react-router-dom';
 import { addProductToShoppingCart } from '../redux/Trunks/shoppingCartThunk';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import loadingGif from '../img/ezgif-5-c06c195611.gif';
 
 const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -235,7 +236,7 @@ const ProductCatalog: React.FC = () => {
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <img
-              src="src\img\ezgif-1-b97dfccf49.gif"
+              src={loadingGif}
               alt="Cargando productos"
               className="loading"
             />
