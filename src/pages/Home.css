@@ -72,6 +72,8 @@
 }
 
 .featured-product {
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
   flex: 1 0 30%;
   margin: 0 10px;
@@ -127,6 +129,13 @@
   border-radius: 8px;
   object-fit: contain;
   background-color: rgb(233, 233, 233);
+}
+
+.featured-caption{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
 }
 
 .featured-caption h4 {
@@ -190,6 +199,7 @@
 .text-section p.price {
   font-size: 1.25rem;
   color: #404040;
+  margin: 0.5px;
 }
 
 .text-section p.not-stock{
@@ -284,6 +294,26 @@
 }
 
 @media only screen and (max-width: 600px) {
+  .featured-caption h4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* limita que el h2 solo pueda tener 2 lineas */
+    overflow: hidden; 
+    text-overflow: ellipsis; /* cuando se pasa de 2 lineas añade puntos suspensivos */
+  }
+  
+  .text-section button{
+    position: absolute;
+  }
+
+  .carouself-btn.next {
+    right: -32px;
+  }
+
+  .carouself-btn.prev {
+    left: -32px;
+  }
+
   .carousel{
     height: 190px;
   }
